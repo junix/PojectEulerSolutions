@@ -27,8 +27,8 @@ reg ((x:xs),[]) = let (l,r) = reg (xs,[]) in (x:l,0:r)
 reg ((xl:xsl),(xr:xsr)) = let (l,r) = reg (xsl,xsr) in (xl:l,xr:r)
 
 addTwoNumber l r = 
-  let (nl,nr) = reg (l,r)
-      stateAll = addAll nl nr
-      (_,(carry,acc)) = runState stateAll (0,[])
-      res =  if carry > 0 then carry : acc else acc
-  in reverse res
+  let (nl,nr)     = reg (l,r)
+      stateAll    = addAll nl nr
+      (carry,acc) = execState stateAll (0,[])
+      res         = if carry > 0 then carry : acc else acc
+  in  reverse res

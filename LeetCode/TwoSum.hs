@@ -68,4 +68,4 @@ normalize (a,b) = if a <= b then (a,b) else (b,a)
 
 twoSum'' xs t = 
   let stateAcc = updateAll t $ sort $ xs `zip` [1..] 
-  in  sort.map normalize.fst $ runState stateAcc M.empty 
+  in  sort.map normalize $ evalState stateAcc M.empty 

@@ -58,16 +58,14 @@ updateOne t (v,i) = state $
      Just inds -> (inds `zip` (repeat i), dict)
      _         -> ([],ups v i dict)
 
-updateAll t [] = do return []
-updateAll t (x:xs) = do
-    v0 <- updateOne t x
-    v1 <- updateAll t xs
+updateAll _ [] = do return []
+updateAll total (h:t) = do
+    v0 <- updateOne total h
+    v1 <- updateAll total t 
     return (v0 ++ v1)
 
-normalize = \(a,b) -> if a <= b then (a,b) else (b,a)
+normalize (a,b) = if a <= b then (a,b) else (b,a)
 
 twoSum'' xs t = 
-  let 
-      stateAcc = updateAll t $ sort $ xs `zip` [1..] 
-  in
-      sort.map normalize.fst $ runState stateAcc M.empty 
+  let stateAcc = updateAll t $ sort $ xs `zip` [1..] 
+  in  sort.map normalize.fst $ runState stateAcc M.empty 

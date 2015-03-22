@@ -11,7 +11,7 @@ Output: index1=1, index2=2
 
 import Data.List (filter,nub,sort,reverse,map)
 import Control.Monad.State
-import Data.Map
+import qualified Data.Map as M
 
 --twoSum :: [Int] -> Int -> [(Integer,Integer)]
 twoSum xs t = let 
@@ -46,26 +46,28 @@ twoSum' xs t = let
 
 
 -- 使用State Monad来实现TwoSum算法
-type IndexMap = Map Integer [Integer]
+type IndexMap = M.Map Integer [Integer]
 
-ups = Data.Map.insert
+ups k v dict = 
+  case M.lookup k dict of 
+    Just ids -> M.insert k (v:ids) dict
+    _        -> M.insert k [v] dict
 
-updateOne :: Integer -> (Integer,Integer) -> State IndexMap [(Integer,Integer)]
-updateOne t (v,i) = state $ \dict->case Data.Map.lookup (t-v) dict of 
-                                         Just inds -> (zip inds (repeat i), dict)
-                                         _ -> case Data.Map.lookup v dict of 
-                                                Just ids -> ([],ups v (i:ids) dict)
-                                                _ -> ([],ups v [i] dict)
+updateOne t (v,i) = state $ 
+  \dict->case M.lookup (t-v) dict of 
+     Just inds -> (inds `zip` (repeat i), dict)
+     _         -> ([],ups v i dict)
 
-updateAll :: Integer -> [(Integer,Integer)]  -> State IndexMap [(Integer,Integer)]
-updateAll t [] = do {return []}
+updateAll t [] = do return []
 updateAll t (x:xs) = do
     v0 <- updateOne t x
     v1 <- updateAll t xs
     return (v0 ++ v1)
 
-twoSum'' xs t = let s = updateAll t $ sort $ xs `zip` [1..] 
-                    (pairs,_) = runState s Data.Map.empty
-                    normal = Data.List.map (\(a,b) -> if a <= b then (a,b) else (b,a)) pairs
-                in
-                    Data.List.sort normal
+normalize = \(a,b) -> if a <= b then (a,b) else (b,a)
+
+twoSum'' xs t = 
+  let 
+      stateAcc = updateAll t $ sort $ xs `zip` [1..] 
+  in
+      sort.map normalize.fst $ runState stateAcc M.empty 

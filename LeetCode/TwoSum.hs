@@ -36,8 +36,8 @@ twoSum' xs t = let
                                              LT ->  merge xs1 xsr
                                              GT ->  merge xsl xs2
                                              EQ ->  let
-                                              (eql,leftl)=span (==x1) xsl
-                                              (eqr,leftr)=span (==x2) xsr
+                                              (eql,leftl)=span (\(a,_)->a==fst x1) xsl
+                                              (eqr,leftr)=span (\(a,_)->a==fst x2) xsr
                                               in
                                                  [(l,r) | (_,l) <- eql,(_,r)<-eqr] ++ merge leftl leftr
                     

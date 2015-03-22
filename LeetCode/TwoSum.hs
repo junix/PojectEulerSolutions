@@ -11,7 +11,7 @@ Output: index1=1, index2=2
 
 -}
 
-import Data.List (sortBy)
+import Data.List (nub,sort,reverse)
 
 --twoSum :: [Int] -> Int -> [(Integer,Integer)]
 twoSum xs t = let 
@@ -22,6 +22,23 @@ twoSum xs t = let
                          , a+b==t
                          , ai < bi]
 
-twoSum' [] t = []
-twoSum' [x] t = []
-twoSum' [x] t = []
+twoSum' :: [Integer] -> Integer -> [(Integer,Integer)]
+twoSum' xs t = let 
+                xsi = sort $ zip xs [1..]
+                allPairs = merge xsi (reverse xsi)
+               in
+                 sort.nub.filter (\(x,y) -> x /= y).map (\(x,y)->if (x < y) then (x,y) else (y,x) ) $ allPairs
+               where
+                merge :: [(Integer,Integer)] -> [(Integer,Integer)] -> [(Integer,Integer)]
+                merge [] _ = []
+                merge  _ [] = []
+                merge xsl@(x1:xs1) xsr@(x2:xs2) = case (fst x1+fst x2) `compare` t of
+                                             LT ->  merge xs1 xsr
+                                             GT ->  merge xsl xs2
+                                             EQ ->  let
+                                              (eql,leftl)=span (==x1) xsl
+                                              (eqr,leftr)=span (==x2) xsr
+                                              in
+                                                 [(l,r) | (_,l) <- eql,(_,r)<-eqr] ++ merge leftl leftr
+                    
+                                                    

@@ -7,11 +7,11 @@ You may assume that each input would have exactly one solution.
 
 Input: numbers={2, 7, 11, 15}, target=9
 Output: index1=1, index2=2 
-
-
 -}
 
-import Data.List (nub,sort,reverse)
+import Data.List (filter,nub,sort,reverse,map)
+import Control.Monad.State
+import Data.Map
 
 --twoSum :: [Int] -> Int -> [(Integer,Integer)]
 twoSum xs t = let 
@@ -27,7 +27,7 @@ twoSum' xs t = let
                 xsi = sort $ zip xs [1..]
                 allPairs = merge xsi (reverse xsi)
                in
-                 sort.nub.filter (\(x,y) -> x /= y).map (\(x,y)->if (x < y) then (x,y) else (y,x) ) $ allPairs
+                 sort.nub.(Data.List.filter (\(x,y) -> x /= y)).(Data.List.map (\(x,y)->if (x < y) then (x,y) else (y,x) )) $ allPairs
                where
                 merge :: [(Integer,Integer)] -> [(Integer,Integer)] -> [(Integer,Integer)]
                 merge [] _ = []
@@ -40,6 +40,32 @@ twoSum' xs t = let
                                               (eql,leftl) = split x1 xsl
                                               (eqr,leftr) = split x2 xsr
                                               in
-                                                 [(l,r) | (_,l) <- eql,(_,r)<-eqr] ++ merge leftl leftr
+                                                 [(l,updateAll) | (_,l) <- eql,(_,updateAll)<-eqr] ++ merge leftl leftr
                     
                                                     
+
+
+-- 使用State Monad来实现TwoSum算法
+type IndexMap = Map Integer [Integer]
+
+ups = Data.Map.insert
+
+updateOne :: Integer -> (Integer,Integer) -> State IndexMap [(Integer,Integer)]
+updateOne t (v,i) = state $ \dict->case Data.Map.lookup (t-v) dict of 
+                                         Just inds -> (zip inds (repeat i), dict)
+                                         _ -> case Data.Map.lookup v dict of 
+                                                Just ids -> ([],ups v (i:ids) dict)
+                                                _ -> ([],ups v [i] dict)
+
+updateAll :: Integer -> [(Integer,Integer)]  -> State IndexMap [(Integer,Integer)]
+updateAll t [] = do {return []}
+updateAll t (x:xs) = do
+    v0 <- updateOne t x
+    v1 <- updateAll t xs
+    return (v0 ++ v1)
+
+twoSum'' xs t = let s = updateAll t $ sort $ xs `zip` [1..] 
+                    (pairs,_) = runState s Data.Map.empty
+                    normal = Data.List.map (\(a,b) -> if a <= b then (a,b) else (b,a)) pairs
+                in
+                    Data.List.sort normal

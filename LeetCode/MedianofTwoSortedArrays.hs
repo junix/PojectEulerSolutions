@@ -10,10 +10,10 @@ import Control.Monad.State
 type CalcState = (Maybe Integer,Integer)
 
 step v = state $ \(maxv,kth) -> 
-  ((),(case kth `compare` 1 of
+  ((),case kth `compare` 1 of
          LT -> (maxv,  kth)
          GT -> (maxv,  kth-1)
-         EQ -> (Just v,0))) 
+         EQ -> (Just v,0)) 
 
 eat []     [] = state $ \s -> ((),s)
 eat [] (x:xs) = do { step x; eat [] xs }

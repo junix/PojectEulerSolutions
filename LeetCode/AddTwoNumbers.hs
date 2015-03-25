@@ -16,15 +16,15 @@ addOne a b = state $
          nacc   = sumd `mod` 10 : acc
      in  ((),(ncarry,nacc))
 
-addAll [] [] = do return ()
+addAll [] [] = return ()
 addAll (x1:xs1) (x2:xs2) = do 
   addOne x1  x2
   addAll xs1 xs2
 
 reg ([],[]) = ([],[])
-reg ([],(x:xs)) = let (l,r) = reg ([],xs) in (0:l,x:r)
-reg ((x:xs),[]) = let (l,r) = reg (xs,[]) in (x:l,0:r)
-reg ((xl:xsl),(xr:xsr)) = let (l,r) = reg (xsl,xsr) in (xl:l,xr:r)
+reg ([],x:xs) = let (l,r) = reg ([],xs) in (0:l,x:r)
+reg (x:xs,[]) = let (l,r) = reg (xs,[]) in (x:l,0:r)
+reg (xl:xsl,xr:xsr) = let (l,r) = reg (xsl,xsr) in (xl:l,xr:r)
 
 addTwoNumber l r = 
   let (nl,nr)     = reg (l,r)

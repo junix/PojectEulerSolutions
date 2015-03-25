@@ -19,24 +19,24 @@
     isMatch("aab", "c*a*b") → true
 -}
 
-type MatchState = ([Char],[Char])
+type MatchState = (String,String)
 
 split ([],    rem) = [rem]
-split ((x:xs),rem) = rem : split (xs,(x:rem))
+split (x:xs,rem) = rem : split (xs,x:rem)
 
 advance :: MatchState -> [MatchState]
 advance ("",         ""     ) = [("","")]
 advance ("",         _      ) = []
 advance (".",        [_]    ) = [("","")]
 advance (".",        _      ) = []
-advance ([p],        [t]    ) = if p == t then [("","")] else []
+advance ([p],        [t]    ) = [("","") | p == t]
 advance ([_],        _      ) = []
-advance ('.':'*':xs, txt    ) = map (\r -> (xs,r)).split $ ((reverse txt),[])
+advance ('.':'*':xs, txt    ) = map (\r -> (xs,r)).split $ (reverse txt,[])
 advance ('.':xs,     []     ) = []
-advance ('.':pxs,    (_:txs)) = [(pxs,txs)]
+advance ('.':pxs,    _:txs  ) = [(pxs,txs)]
 advance (c:'*':xs,   txt    ) = map (\r -> (xs,r)).split.span (==c) $ txt 
 advance (_:_,        []     ) = []
-advance (p:pxs,      t:txs  ) = if (p == t) then [(pxs,txs)] else []
+advance (p:pxs,      t:txs  ) = [(pxs,txs) | p == t]
 
 match [] = False
-match xs = if ("","") `elem` xs then True else match $ concatMap advance xs
+match xs = ("","") `elem` xs || match $ concatMap advance xs

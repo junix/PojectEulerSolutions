@@ -21,7 +21,7 @@
 
 type MatchState = (String,String)
 
-split ([],    rem) = [rem]
+split ([],  rem) = [rem]
 split (x:xs,rem) = rem : split (xs,x:rem)
 
 advance :: MatchState -> [MatchState]

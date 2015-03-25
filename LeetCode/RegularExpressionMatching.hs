@@ -24,19 +24,19 @@ type MatchState = (String,String)
 split ([],  rem) = [rem]
 split (x:xs,rem) = rem : split (xs,x:rem)
 
-advance :: MatchState -> [MatchState]
-advance ("",         ""   ) = [("","")]
-advance ("",         _    ) = []
-advance (".",        [_]  ) = [("","")]
-advance (".",        _    ) = []
-advance ([p],        [t]  ) = [("","") | p == t]
-advance ([_],        _    ) = []
-advance ('.':'*':xs, txt  ) = map (\r -> (xs,r)).split $ (reverse txt,[])
-advance ('.':xs,     []   ) = []
-advance ('.':pxs,    _:txs) = [(pxs,txs)]
-advance (c:'*':xs,   txt  ) = map (\r -> (xs,r)).split.span (==c) $ txt 
-advance (_:_,        []   ) = []
-advance (p:pxs,      t:txs) = [(pxs,txs) | p == t]
+step :: MatchState -> [MatchState]
+step ("",         ""   ) = [("","")]
+step ("",         _    ) = []
+step (".",        [_]  ) = [("","")]
+step (".",        _    ) = []
+step ([p],        [t]  ) = [("","") | p == t]
+step ([_],        _    ) = []
+step ('.':'*':xs, txt  ) = map (\r -> (xs,r)).split $ (reverse txt,[])
+step ('.':xs,     []   ) = []
+step ('.':pxs,    _:txs) = [(pxs,txs)]
+step (c:'*':xs,   txt  ) = map (\r -> (xs,r)).split.span (==c) $ txt 
+step (_:_,        []   ) = []
+step (p:pxs,      t:txs) = [(pxs,txs) | p == t]
 
 match [] = False
-match xs = ("","") `elem` xs || match $ concatMap advance xs
+match xs = ("","") `elem` xs || match $ concatMap step xs

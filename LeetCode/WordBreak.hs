@@ -15,7 +15,7 @@ import qualified Data.Set as S
 
 wordBreak chs = wordBreak' ""  chs . S.fromList . map reverse
 
-wordBreak' ""  "" dict = True
-wordBreak' acc "" dict = S.member acc dict
-wordBreak' acc (x:xs) dict = 
-  S.member (x:acc) dict && wordBreak' "" xs dict || wordBreak' (x:acc) xs dict
+wordBreak' ""  "" dict     = True
+wordBreak' acc "" dict     = S.member acc dict
+wordBreak' acc (x:xs) dict = S.member (x:acc) dict && wordBreak' "" xs dict || 
+                             wordBreak' (x:acc) xs dict

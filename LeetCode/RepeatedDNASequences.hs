@@ -27,6 +27,7 @@ update' (dict,last9Ch) e =
                                         
 
 findRe :: String -> [String]
-findRe str = let (hd,tl) = splitAt 9 str 
-             in  M.keys . M.filter (>1) . fst . foldl update' (M.empty,reverse hd) $ tl
+findRe str = 
+  let (hd,tl) = splitAt 9 str 
+  in  M.keys . M.filter (>1) . fst . foldl update' (M.empty,reverse hd) $ tl
                                         

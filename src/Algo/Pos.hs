@@ -1,4 +1,4 @@
-module Chap02.Pos where
+module Algo.Pos where
 
 import Data.Maybe (listToMaybe)
 

@@ -21,3 +21,6 @@ pos''' e xs= pos_aux e xs 0
             pos_aux e (x:xs) index
                 | e == x = Just (index + 1)
                 | otherwise = pos_aux e xs (index+1)
+
+position' :: Eq a => a -> [a] -> Int
+position' x xs = head ([j | (j,x') <- zip [0..] xs, x' == x] ++ [-1])

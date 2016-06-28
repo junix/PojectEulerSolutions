@@ -70,16 +70,33 @@ data DietStatement = DAssign String Expression
                      deriving (Show, Eq)
 
 desugar :: Statement -> DietStatement
-desugar = undefined
-
+desugar Skip               = DSkip
+desugar (Assign v e)       = DAssign v e
+desugar (Incr v)           = DAssign v (Op (Var v) Plus (Val 1))
+desugar (If e thens elses) = DIf e (desugar thens) (desugar elses)
+desugar (While e s)        = DWhile e (desugar s)
+desugar (Sequence s1 s2)   = DSequence (desugar s1) (desugar s2)
+desugar (For init cond step body) =
+    DSequence (desugar init) (DWhile cond (DSequence (desugar step) (desugar body)))
 
 -- Exercise 4 -----------------------------------------
 
 evalSimple :: State -> DietStatement -> State
-evalSimple = undefined
+evalSimple s DSkip             = s
+evalSimple s (DAssign v e)     = extend s v $ evalE s e
+evalSimple s (DSequence s1 s2) = evalSimple (evalSimple s s1) s2
+evalSimple s (DIf cond thens elses) = if evalE s cond > 0
+                                      then evalSimple s thens
+                                      else evalSimple s elses
+evalSimple s stmt@(DWhile cond body) = if c == 0
+                                       then s
+                                       else evalSimple (evalSimple s body) stmt
+                                       where c = evalE s cond
+
+
 
 run :: State -> Statement -> State
-run = undefined
+run s stmt = evalSimple s $ desugar stmt
 
 -- Programs -------------------------------------------
 

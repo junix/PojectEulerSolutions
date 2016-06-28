@@ -77,7 +77,7 @@ desugar (If e thens elses) = DIf e (desugar thens) (desugar elses)
 desugar (While e s)        = DWhile e (desugar s)
 desugar (Sequence s1 s2)   = DSequence (desugar s1) (desugar s2)
 desugar (For init cond step body) =
-    DSequence (desugar init) (DWhile cond (DSequence (desugar step) (desugar body)))
+    DSequence (desugar init) (DWhile cond (DSequence (desugar body) (desugar step)))
 
 -- Exercise 4 -----------------------------------------
 

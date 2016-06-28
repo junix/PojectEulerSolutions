@@ -42,7 +42,23 @@ empty = \_ -> 0
 -- Exercise 2 -----------------------------------------
 
 evalE :: State -> Expression -> Int
-evalE = undefined
+evalE s (Var v) = s v
+evalE _ (Val v) = v
+evalE s (Op lexpr op rexpr)
+    |op == Plus   = l + r
+    |op == Minus  = l - r
+    |op == Times  = l * r
+    |op == Divide = l `div` r
+    |op == Gt     = b2i $ l > r
+    |op == Ge     = b2i $ l >= r
+    |op == Lt     = b2i $ l < r
+    |op == Le     = b2i $ l <= r
+    |op == Eql    = b2i $ l == r
+    where l = evalE s lexpr
+          r = evalE s rexpr
+          b2i :: Bool -> Int
+          b2i True  = 1
+          b2i False = 0
 
 -- Exercise 3 -----------------------------------------
 

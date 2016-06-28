@@ -90,7 +90,8 @@ evalSimple s (DIf cond thens elses) = if evalE s cond > 0
                                       else evalSimple s elses
 evalSimple s stmt@(DWhile cond body) = if c == 0
                                        then s
-                                       else evalSimple (evalSimple s body) stmt
+                                       else let s1 = evalSimple s body
+                                            in  evalSimple s1 stmt
                                        where c = evalE s cond
 
 

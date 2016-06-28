@@ -6,22 +6,25 @@ newtype Poly a = P [a]
 -- Exercise 1 -----------------------------------------
 
 x :: Num a => Poly a
-x = undefined
+x = P [1]
 
 -- Exercise 2 ----------------------------------------
 
 instance (Num a, Eq a) => Eq (Poly a) where
-    (==) = undefined
+    P l == P r = l == r
  
 -- Exercise 3 -----------------------------------------
 
 instance (Num a, Eq a, Show a) => Show (Poly a) where
-    show = undefined
+    show (P e) = "P " ++ show e
 
 -- Exercise 4 -----------------------------------------
 
 plus :: Num a => Poly a -> Poly a -> Poly a
-plus = undefined
+plus (P []) r = r
+plus l (P []) = l
+plus (P (x:xs)) (P (y:yx)) = P ((x+y):remain)
+     where P remain = P xs `plus` P yx
 
 -- Exercise 5 -----------------------------------------
 

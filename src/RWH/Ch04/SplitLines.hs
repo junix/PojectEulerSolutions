@@ -35,4 +35,3 @@ splitLines3 xs = if null l then [] else l:splitLines3 r
   where
     xs' = dropWhile isLineTerm xs
     (l, r) = break isLineTerm xs'
-

@@ -15,7 +15,7 @@ import Data.List
 -}
 
 maxRot :: Integer -> Integer
-maxRot = maximum.map toInt.rotate.getDigits
+maxRot = toInt.rotate.getDigits
 
 getDigits :: Integer -> [Integer]
 getDigits = map (read . (:[]))  . show
@@ -23,9 +23,9 @@ getDigits = map (read . (:[]))  . show
 toInt :: [Integer] -> Integer
 toInt = read . intercalate "". map show
 
-rotate :: [Integer] -> [[Integer]]
+rotate :: [Integer] -> [Integer]
 rotate [] = []
-rotate [x] = [[x]]
-rotate a@(x:y:xs) = a:map (y:) remain
+rotate [x] = [x]
+rotate a@(x:y:xs) = max a (y:remain)
     where remain = rotate (xs ++ [x])
 

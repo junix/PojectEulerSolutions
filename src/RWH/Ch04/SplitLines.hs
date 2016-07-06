@@ -32,6 +32,7 @@ splitLines'' s = snd.step.foldr go ([], []) $ s
 splitLines3 :: String -> [String]
 splitLines3 [] = []
 splitLines3 xs = if null l then [] else l:splitLines3 r
-  where xs' = dropWhile isLineTerm xs
-        (l, r) = break isLineTerm xs'
+  where
+    xs' = dropWhile isLineTerm xs
+    (l, r) = break isLineTerm xs'
 

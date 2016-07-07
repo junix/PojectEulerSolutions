@@ -1,6 +1,6 @@
 module Codewars.Maxrot where
 import Data.List
-import Control.Category ((>>>))
+import Control.Category ((>>>), (>>>))
 
 {-
     Take a number: 56789. Rotate left, you get 67895.
@@ -16,10 +16,11 @@ import Control.Category ((>>>))
 -}
 
 maxRot :: Integer -> Integer
-maxRot = toInt.rotate.getDigits
+--maxRot = toInt.rotate.getDigits
+maxRot = getDigits >>> rotate >>> toInt
 
 getDigits :: Integer -> [Integer]
-getDigits = map (read . (:[]))  . show
+getDigits = show >>> map ((:[]) >>> read)
 
 toInt :: [Integer] -> Integer
 --toInt = read . intercalate "". map show

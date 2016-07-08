@@ -1,7 +1,6 @@
 import qualified Data.ByteString.Lazy.Char8 as LB
-main = do
-    contents <- LB.getContents
-    print $ sumFile contents
+main =
+    LB.getContents >>= return.sumFile >>= print
   where
     toInt   = (fst <$>). LB.readInt
     sumFile = (sum <$>). sequenceA. map toInt. LB.words

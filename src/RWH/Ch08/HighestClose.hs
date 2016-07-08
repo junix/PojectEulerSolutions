@@ -5,10 +5,9 @@ main = do
     files <- System.Environment.getArgs
     if null files
         then putStrLn "no data file"
-        else do
-            content <- L.readFile (head files)
-            let maxPrice = maximum . (Nothing:) . map closing . L.lines $ content
-            print maxPrice
+        else L.readFile (head files) >>= return . maxPrice >>= print
+
+maxPrice = maximum . (Nothing:) . map closing . L.lines
 
 readPrice :: L.ByteString -> Maybe Int
 readPrice str =

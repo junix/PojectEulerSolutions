@@ -14,5 +14,4 @@ isElfFile path = do
 main :: IO ()
 main = do
   paths <- System.Environment.getArgs
-  mapM isElfFile paths
-  return ()
+  mapM_ isElfFile paths

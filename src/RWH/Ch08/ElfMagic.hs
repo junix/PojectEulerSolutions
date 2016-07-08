@@ -12,6 +12,7 @@ isElfFile path = do
     content <- L.readFile path
     print $ hasElfMagic content
 
+main :: IO ()
 main = do
   paths <- System.Environment.getArgs
   mapM isElfFile paths

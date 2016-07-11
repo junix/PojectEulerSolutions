@@ -1,4 +1,4 @@
-module Euler.P08 where
+module Euler.P008 where
 import Data.List (sort,nub)
 
 {-

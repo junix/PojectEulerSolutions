@@ -1,4 +1,4 @@
-module Euler.P03 where
+module Euler.P003 where
 
 primes = filterPrime [2..]
   where filterPrime (p:xs) =

@@ -1,4 +1,5 @@
 module Codewars.Seven where
+import Control.Monad.State
 {-
 to be divisible or not by 7 is obtained; you can stop when this number has at most 2 digits because you are supposed to know if a number of at most 2 digits is divisible by 7 or not.
 The original number is divisible by 7 if and only if the last number obtained using this procedure is divisible by 7.

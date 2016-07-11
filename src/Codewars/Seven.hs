@@ -30,7 +30,7 @@ seven(477557101) should return [28, 7]
 -}
 
 seven :: Integer -> (Integer, Int)
-seven m = iter (m, 0)
+seven m = swap $ runState calc'' m
 
 iter (m, n) = if m' <= 0 then (m, n) else iter (m', n+1)
   where m' = step m
@@ -38,5 +38,24 @@ iter (m, n) = if m' <= 0 then (m, n) else iter (m', n+1)
 step x = d - 2 * r
   where (d, r) = x `quotRem` 10
 
+calc :: Integer -> State Integer Integer
+calc n = state $ \x ->
+    let v = step x
+    in  if v <= 0
+        then (v, x)
+        else (v, v)
+
+calc' :: Integer -> State Integer Integer
+calc' n = do
+    v <- calc n
+    if v <= 0
+        then return (n-1)
+        else calc' (n+1)
+
+calc'' :: State Integer Integer
+calc'' = calc' 1
+
+swap :: (Integer, Integer) ->  (Integer, Int)
+swap (a,b) = (b, fromInteger a)
 
 

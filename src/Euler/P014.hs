@@ -1,8 +1,10 @@
 -- module Euler.P014 where
 import Data.Bits (shiftR, (.&.))
 import Control.Monad.State
+import Control.Parallel.Strategies
 import Data.Tuple (swap)
-import qualified Data.Map.Strict as M
+import Data.List (maximumBy)
+import qualified Data.IntMap.Strict as M
 {-
 The following iterative sequence is defined for the set of positive integers:
 
@@ -37,7 +39,7 @@ next n
     | n .&. 1 == 0 = n `quot` 2
     | otherwise    = 3 * n + 1
 
-type S = M.Map Int Int
+type S = M.IntMap Int
 
 calc :: Int -> State S Int
 calc 1 = state $ \s -> (1, M.insert 1 1 s)
@@ -53,7 +55,18 @@ calcRange from end
     | from == end = return ()
     | otherwise   = calc from >> calcRange (from+1) end
 
-solute n = snd . maximum . map swap . M.toList . snd $ runState (calcRange 1 n) M.empty
+solute :: Int -> Int -> Int
+solute f e = snd . maximum . map swap . M.toList . snd $ runState (calcRange f e) M.empty
 
-main = print $ solute 1000000
+{-
+parSol :: Int
+parSol = runEval $ do
+    n1 <- rpar (solute 1      250000)
+    n2 <- rpar (solute 250000 500000)
+    n3 <- rpar (solute 500000 750000)
+    n4 <- rpar (solute 750000 1000000)
+    return (maximum [n1,n2,n3,n4])
+
+main = print $ solute 1 1000000
+-}
 

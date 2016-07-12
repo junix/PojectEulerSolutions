@@ -1,4 +1,4 @@
--- module Euler.P014 where
+module Euler.P014 where
 import Data.Bits (shiftR, (.&.))
 import Control.Monad.State
 import Control.Parallel.Strategies

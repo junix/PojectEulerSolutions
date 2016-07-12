@@ -2,4 +2,5 @@ all:
 	ghc -O2 Rpar.hs -threaded -o Rpar.par
 	ghc -O2 Rpar.hs  -o Rpar.seq
 clean:
-	rm -rf *.o *.hi ./Rpar.par ./Rpar.seq
+	gfind . -type f -executable -delete
+	gfind . -name '*.o' -delete  -or -name '*.hi' -delete

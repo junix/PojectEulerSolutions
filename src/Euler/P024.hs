@@ -24,3 +24,8 @@ lexPerms xs = concatMap (\x -> map (x:) . lexPerms $ delete x xs) xs
 
 solution = (lexPerms [0..9]) !! 999999
 
+permutations [] = [[]]
+permutations xs = [x:ys | x <- xs, ys <- permutation (delete x xs)]
+
+main = print (permutations "0123456789" !! 999999)
+

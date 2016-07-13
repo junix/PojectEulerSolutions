@@ -1,4 +1,5 @@
 module Euler.P024 where
+import Data.List
 
 perms :: String -> [String]
 perms []  = []
@@ -17,3 +18,9 @@ nextPerm xs = case remain of
 
 euler24 :: Integer
 euler24 = read . head . drop  999999 $ perms "0123456789"
+
+lexPerms [x] = [[x]]
+lexPerms xs = concatMap (\x -> map (x:) . lexPerms $ delete x xs) xs
+
+solution = (lexPerms [0..9]) !! 999999
+

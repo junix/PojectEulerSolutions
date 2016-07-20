@@ -1,7 +1,5 @@
 module Euler.P026 where
 
-import Control.Monad
-
 calcCycle n = map id (go 1 n [])
   where go remain n acc
             | r == 0 = []

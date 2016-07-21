@@ -45,35 +45,22 @@ cardValue (Card t v) = v
 sameSuit :: [Card] -> Bool
 sameSuit = (==1).length . nub . map cardType
 
-cons :: [Card] -> Maybe Int
-cons cards = if isCons then Just . head $ values else Nothing
+cons :: [Card] -> [Int]
+cons cards = if isCons then [head values] else []
     where values = sort . map cardValue $ cards
           isCons = all (==(-1)). zipWith (-) values $ (tail values)
 
 parse [v,t] = Card (read [t]) (readv [v])
-
-main = do
-    c <- readFile "p054_poker.txt"
-    let rounds = lines c
-    --let f = filter ((==GT).snd). map comp $ rounds
-    let f = map comp $ rounds
-    p f
-    print (length . filter ((==GT).snd) $ f)
 
 comp line = (vs,cmp)
     where (a,b) = (splitAt 5) . map parse.words $ line
           vs = ((a,select a), (b,select b))
           cmp = select a `compare` select b
 
-p [] = return ()
-p (x:xs) = print x >> p xs
-
+straightFlush :: [Card] -> [Rule]
 straightFlush cards = if sameSuit cards
-                      then case c of
-                             Just v -> [StraightFlush v]
-                             Nothing -> []
+                      then map StraightFlush . cons $ cards
                       else []
-    where c = cons cards
 
 fourKind cards = case stats cards of
                    [(4,x),(1,y)] -> [FourKind x y]
@@ -85,10 +72,8 @@ fullHouse cards = case stats cards of
 
 flush cards = if sameSuit cards then [Flush] else []
 
-straight cards = case c of
-                   Just v -> [Straight v]
-                   Nothing -> []
-    where c = cons cards
+straight :: [Card] -> [Rule]
+straight = map Straight . cons
 
 threeKind cards = case stats cards of
                      [(3,x),(1,y),(1,z)] -> [ThreeKind x y z]
@@ -98,7 +83,7 @@ twoPair cards = case stats cards of
                   ((2,x):(2,y):_) -> [TwoPair x y]
                   _  -> []
 
-pair cards = case  stats $ cards of
+pair cards = case  stats cards of
                [(2,x),(1,y),(1,z),(1,w)] -> [Pair x y z w]
                _ -> []
 
@@ -109,3 +94,9 @@ stats cards = reverse . sort . map Data.Tuple.swap . M.toList $ stats
 highCard cards = [HighCard . maximum . map cardValue $ cards]
 
 select cards = head . concatMap ($cards) $ [ straightFlush ,fourKind ,fullHouse ,flush ,straight ,threeKind ,twoPair ,pair ,highCard]
+
+main = do
+    c <- readFile "p054_poker.txt"
+    let rounds = lines c
+    let f = map comp $ rounds
+    print (length . filter ((==GT).snd) $ f)

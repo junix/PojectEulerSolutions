@@ -22,19 +22,10 @@ instance Eq (Card) where
 instance Ord Card where
     Card _ v1 `compare` Card _ v2 = v1 `compare` v2
 
-showv 10 = "T"
-showv 11 = "J"
-showv 12 = "Q"
-showv 13 = "K"
-showv 14 = "A"
-showv n = show n
+showv n = (:[]).(!!n) $ (['0'..'9'] ++ "TJQKA")
 
-readv "T" = 10
-readv "J" = 11
-readv "Q" = 12
-readv "K" = 13
-readv "A" = 14
-readv s = read s :: Int
+dict = M.fromList $ [("T", 10), ("J", 11), ("Q",12), ("K",13), ("A",14)] ++ map (\x -> (show x, x)) [1..9]
+readv s = dict M.! s
 
 instance Show Card where
     show (Card t v) = showv v ++ show t
@@ -52,51 +43,30 @@ cons cards = if isCons then [head values] else []
 
 parse [v,t] = Card (read [t]) (readv [v])
 
-comp line = (vs,cmp)
+comp line = select' a `compare` select' b
     where (a,b) = (splitAt 5) . map parse.words $ line
-          vs = ((a,select a), (b,select b))
-          cmp = select a `compare` select b
-
-straightFlush :: [Card] -> [Rule]
-straightFlush cards = if sameSuit cards
-                      then map StraightFlush . cons $ cards
-                      else []
-
-fourKind cards = case stats cards of
-                   [(4,x),(1,y)] -> [FourKind x y]
-                   _ -> []
-
-fullHouse cards = case stats cards of
-                    [(3,x),(2,y)] -> [FullHouse x y]
-                    _ -> []
-
-flush cards = if sameSuit cards then [Flush] else []
-
-straight :: [Card] -> [Rule]
-straight = map Straight . cons
-
-threeKind cards = case stats cards of
-                     [(3,x),(1,y),(1,z)] -> [ThreeKind x y z]
-                     _ -> []
-
-twoPair cards = case stats cards of
-                  ((2,x):(2,y):_) -> [TwoPair x y]
-                  _  -> []
-
-pair cards = case  stats cards of
-               [(2,x),(1,y),(1,z),(1,w)] -> [Pair x y z w]
-               _ -> []
 
 stats cards = reverse . sort . map Data.Tuple.swap . M.toList $ stats
     where values = map cardValue cards
           stats = foldl (\m v -> M.insertWith (+) v 1 m) M.empty  values
 
-highCard cards = [HighCard . maximum . map cardValue $ cards]
-
-select cards = head . concatMap ($cards) $ [ straightFlush ,fourKind ,fullHouse ,flush ,straight ,threeKind ,twoPair ,pair ,highCard]
+select' xs
+    | isSameSuit && length c > 0 = StraightFlush (head c)
+    | freqCount == [4,1]         = FourKind (head items) (last items)
+    | freqCount == [3,2]         = FullHouse (head items) (last items)
+    | isSameSuit                 = Flush
+    | length c > 0               = Straight (head c)
+    | freqCount == [3,1,1]       = ThreeKind (items !! 0) (items !! 1) (items!!2)
+    | freqCount == [2,2,1]       = TwoPair (items !! 0) (items !! 1)
+    | freqCount == [2,1,1,1]     = Pair (items !! 0) (items !! 1) (items!!2) (items !! 3)
+    | otherwise = HighCard . maximum . map cardValue $ xs
+    where isSameSuit = sameSuit xs
+          c          = cons xs
+          freq       = stats xs
+          freqCount  = map fst freq
+          items      = map snd freq
 
 main = do
     c <- readFile "p054_poker.txt"
-    let rounds = lines c
-    let f = map comp $ rounds
-    print (length . filter ((==GT).snd) $ f)
+    let winCount = length.filter (==GT). map comp . lines $ c
+    print winCount

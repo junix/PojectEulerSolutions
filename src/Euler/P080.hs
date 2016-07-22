@@ -9,12 +9,8 @@ type F = BigFloat Prec110
 sqrt' :: Integer -> F
 sqrt' n = sqrt $ fromInteger n
 
-digitalSum n = sum .
-               map (sub0 . ord) .
-               take 100 .
-               filter (/='.') .
-               show .
-               sqrt' $ n
+digitalSum :: Integer -> Int
+digitalSum = sum . map (sub0 . ord) . take 100 . filter (/='.') . show . sqrt'
    where sub0 = subtract (ord '0')
 
 euler =  sum . map digitalSum $ [1..100] \\ (map (^2) [1..10])

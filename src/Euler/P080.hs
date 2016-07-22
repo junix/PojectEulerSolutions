@@ -10,8 +10,11 @@ sqrt' :: Integer -> F
 sqrt' n = sqrt $ fromInteger n
 
 digitalSum n = sum .
-               map ((subtract (ord '0')).ord) .
+               map (sub0 . ord) .
                take 100 .
-               filter (/='.'). show . sqrt' $ n
+               filter (/='.') .
+               show .
+               sqrt' $ n
+   where sub0 = subtract (ord '0')
 
-eulser =  sum . map digitalSum $ [1..100] \\ (map (^2) [1..10])
+euler =  sum . map digitalSum $ [1..100] \\ (map (^2) [1..10])

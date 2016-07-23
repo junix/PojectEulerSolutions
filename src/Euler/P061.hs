@@ -9,8 +9,6 @@ f 8 = \x->x*(3*x - 2)
 
 p n = dropWhile (<10^3) . takeWhile (<10^4) . map (f n) $ [1..]
 
-sp n = n `quotRem` 100
-
 allSeq = map (map (`quotRem` 100) . p) [3..8]
 
 seek = sum . map (\(x,y) -> x*100+y) . head . filter isChained . concatMap (chain left) $ (head allSeq)

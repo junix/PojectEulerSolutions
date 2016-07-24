@@ -1,67 +1,36 @@
 module Euler.P060 where
-import Data.List (sort , nub, isPrefixOf, isSuffixOf, intersect)
 
-import Math.NumberTheory.Primes
 
-isConsPr :: Integer -> Bool
-isConsPr = not . null . splitCons
 
-splitCons :: Integer -> [(Integer, Integer)]
-splitCons n = go ([c]) cs
-    where (c:cs) = show n
-          go _ [] = []
-          go xs ys'@(y:ys) = if isPrime rn && isPrime yn && isStrPr zs
-                             then (rn, yn) : next
-                             else next
-            where rs = reverse xs
-                  rn = read rs
-                  yn = read ys'
-                  zs = ys' ++ rs
-                  next = go (y:xs) ys
+main = print (sum (head solve)) >> getLine
 
-isCons a b = isPrime a && isPrime b && isPrime c && isPrime d
-    where c = read (show a ++ show b)
-          d = read (show b ++ show a)
+solve = do
+ a <- primesTo10000
+ let m = f a $ dropWhile (<= a) primesTo10000
+ b <- m
+ let n = f b $ dropWhile (<= b) m
+ c <- n
+ let o = f c $ dropWhile (<= c) n
+ d <- o
+ let p = f d $ dropWhile (<= d) o
+ e <- p
+ return [a,b,c,d,e]
+ where
+  f x = filter (\y -> isPrime (read (shows x (show y)))
+                && isPrime (read (shows y (show x))))
 
-canCarve pred carveOp n consn = if pred sc && isCons n m then [m] else []
-    where sc = show consn
-          m = read . carveOp $ sc :: Integer
 
-isStrPr :: String -> Bool
-isStrPr = isPrime . read
 
-consSeq = filter isConsPr $ primes
+primesTo100 :: [Integer]
+primesTo100 = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97]
 
-tryPair xs (a,b) = sort . nub $ (try a xs `intersect` try b xs)
+trialDivision ps n = doTrialDivision ps
+	where doTrialDivision (p:ps) = let (q,r) = n `quotRem` p in if r == 0 then False else if q < p then True else doTrialDivision ps
+	      doTrialDivision [] = True
 
-try a xs = concatMap p1 xs `intersect` concatMap p2 xs
-    where sa = show a
-          lsa = length sa
-          pred s = sa /= s && (sa `isPrefixOf` s)
-          carve = drop lsa
-          p1 = canCarve pred carve a
-          pred2 s = sa /= s && (sa `isSuffixOf` s)
-          carve2 :: String -> String
-          carve2 xs = reverse . drop lsa . reverse $ xs
-          p2 = canCarve pred2 carve2 a
+primesTo10000 = primesTo100 ++ filter (trialDivision primesTo100) [101,103..9999]
 
-euler = go [] consSeq
-    where go acc (x:xs) = if null u then go (x:acc) xs else u : go (x:acc) xs
-               where ps = splitCons x
-                     m = filter ((>2).length.fst) . map (\pr -> (tryPair acc pr, pr))  $ ps
-                     u = concatMap f m
+isTrialDivisionPrime 2 = True -- special case, not caught by above code
+isTrialDivisionPrime n = trialDivision (primesTo10000 ++ [10001,10003..]) n
 
-f (cs,ab) = if null t then [] else [(head t, ab)]
-    where t = selectP cs
-
-selectT [] = []
-selectT [_] = []
-selectT [_,_] = []
-selectT [a,b,c] = if isCons a b && isCons b c && isCons a c then [(a,b,c)] else []
-selectT (x:xs) = [(x,a,b) | (a,b) <- selectP xs, isCons x a, isCons x b] ++ selectT xs
-
-selectP [] = []
-selectP [_] = []
-selectP [a,b] = if isCons a b then [(a,b)] else []
-selectP (x:xs) = (map (\e -> (x,e)) . filter (isCons x) $ xs) ++ selectP xs
-
+isPrime = isTrialDivisionPrime

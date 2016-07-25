@@ -1,4 +1,4 @@
-module Main ( main ) where
+module P111  where
 import Control.Parallel.Strategies
 import Math.NumberTheory.Primes
 import Data.List (sort,delete)
@@ -47,3 +47,5 @@ allSeqs = concatMap (maxLenSeq 10) ['0'..'9']
 select 0 xs = [[]]
 select n [] = []
 select n (c:cs) = [ replicate k c ++ r  | k <- [0..n], r <- select (n-k) cs]
+
+euler = sum allSeqs

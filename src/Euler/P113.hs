@@ -23,5 +23,6 @@ pseq n = foldl' update initDict [2..n]
 
 allNonLeapCnt n = sum [countOnKDigits k | k <- [1..n]]
     where d = pseq n
-          countOnKDigits k = sum [d M.! (x,k,Inc) | x <- ['1'..'9']] +
-                             sum [d M.! (x,k,Desc)| x <- ['1'..'9']] - 9
+          countOnKDigits k = incCnt + decCnt - 9
+            where incCnt = sum [d M.! (x,k,Inc) | x <- ['1'..'9']]
+                  decCnt = sum [d M.! (x,k,Desc)| x <- ['1'..'9']]

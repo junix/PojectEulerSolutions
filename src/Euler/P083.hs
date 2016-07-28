@@ -1,6 +1,4 @@
 module Euler.P083 where
-import Data.Array (Array(..), (!), listArray)
-import Data.STRef
 import Control.Monad.ST
 import Data.Array.ST
 import Data.List.Split (wordsBy)

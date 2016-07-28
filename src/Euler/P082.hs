@@ -21,19 +21,18 @@ m2v l x y = y*l + x
 nei l x y = filter (\(a,b) -> iN a && iN b) [(x-1,y), (x,y-1), (x,y+1)]
     where iN v = v >= 0 && v < l
 
-init1 :: Integer
+initLeft :: Integer
       -> Integer
       -> Integer
       -> STArray s Integer (Integer,Integer)
       -> ST s (STArray s Integer (Integer,Integer))
-init1 l s e m = do
+initLeft l s e m = do
     if s >= e
        then return m
-       else do
-               let p = s*l
-               (a,b) <- readArray m p
-               writeArray m p (b,b)
-               init1 l (s+1) e m
+       else do { let p = s*l
+               ; (a,b) <- readArray m p
+               ; writeArray m p (b,b)
+               ; initLeft l (s+1) e m }
 
 update :: Integer
        -> STArray s Integer (Integer,Integer)
@@ -59,7 +58,7 @@ update l m = go m 0 0 False
 euler xs = minimum . map (es!!) $ lastCols
     where len = truncate . sqrt . fromInteger . toInteger . length $ xs
           lastCol = len - 1
-          es = runST $ initm xs>>= init1 len 0 len>>= update  len>>= getElems
+          es = runST $ initm xs>>= initLeft len 0 len>>= update len>>= getElems
           lastCols = map fromInteger .  map (m2v len lastCol) $ [0..lastCol]
 
 main = do

@@ -10,9 +10,3 @@ euler = uncurry (*) . snd . head $ go allPerm []
              | x == y =  go xs (x':ys')
              | x >  y =  go xs ys'
              | otherwise = go xs [x']
-
-
-
-
-
-

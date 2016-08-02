@@ -18,3 +18,12 @@ c n
                     in (sum xs, M.insert n (sum xs) s')
 
 euler = fst $ runState (c 50) M.empty
+
+tabulate bounds f = array bounds [(i,f i) | i <- range bounds]
+dp bounds f = (memo!) where memo = tabulate bounds (f (memo!))
+
+p114 n = dp (-1,n) f n where
+  f rec x | x <= 0 = 1
+          | otherwise = sum [rec(x-a) | a <-1:[4..x+1],x>a-2]
+
+main = print (p114 50)

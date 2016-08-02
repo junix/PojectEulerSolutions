@@ -1,8 +1,13 @@
 module SQL.Tree where
 
-count :: Integer -> Integer -> Integer
-count _ 0 = 1
-count children level = ancestors + parents * children
+deps _ 0 = 1
+deps children level = ancestors + parents * children
     where plevel    = level - 1
-          parents   = children ^plevel
-          ancestors = count children plevel
+          parents   = children^plevel
+          ancestors = deps children plevel
+
+paths children 0     = 0
+paths children level = ppaths + cpaths
+    where plevel = level - 1
+          cpaths = deps children level*level
+          ppaths = paths children plevel

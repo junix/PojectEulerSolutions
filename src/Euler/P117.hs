@@ -1,5 +1,4 @@
 module Euler.P117 where
-
 import qualified Data.Map.Strict as M
 import Control.Monad.State
 
@@ -13,7 +12,7 @@ f n
                 Just v ->
                      (v, s)
                 Nothing ->
-                    let subc = filter (>=0) [n-1,n-2,n-3,n-4]
+                    let subc = filter (>=0) . map (n-) $ [1..4]
                         (xs, s') = runState (mapM f subc) s
                     in (sum xs, M.insert n (sum xs) s')
 

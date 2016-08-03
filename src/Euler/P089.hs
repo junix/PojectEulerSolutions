@@ -1,4 +1,5 @@
 module Euler.P089 where
+import Data.List(isPrefixOf)
 
 main = do
     c <- readFile "./p089_roman.txt"

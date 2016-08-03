@@ -3,8 +3,13 @@ import Data.List(isPrefixOf)
 
 main = do
     c <- readFile "./p089_roman.txt"
-    let ls = sum . map (\(a,b) -> length a - length b) . filter (\(a,b) -> a /= b) . map (\s -> (s, conv s)). lines $ c
-    print ls
+    print $ sum . map save . lines $ c
+
+saveCount :: [String] -> Int
+saveCount = sum .
+            map (\(a,b) -> length a - length b) .
+            filter (\(a,b) -> a /= b) .
+            map (\s -> (s, conv s))
 
 data R = I | V | X | L | C | D | M deriving (Ord,Eq,Show,Read)
 data N = U R  | S R R | CC [N] deriving(Eq,Show)
@@ -57,3 +62,15 @@ int2r n
     where (q0,r0) = n `quotRem` 1000
           (q1,r1) = n `quotRem` 100
           (q2,r2) = n `quotRem` 10
+
+-- another solution
+shortten []                       = []
+shortten ('V':'I':'I':'I':'I':xs) = 'I':'X':shortten xs
+shortten ('I':'I':'I':'I':xs)     = 'I':'V':shortten xs
+shortten ('L':'X':'X':'X':'X':xs) = 'X':'C':shortten xs
+shortten ('X':'X':'X':'X':xs)     = 'X':'L':shortten xs
+shortten ('D':'C':'C':'C':'C':xs) = 'C':'M':shortten xs
+shortten ('C':'C':'C':'C':xs)     = 'C':'D':shortten xs
+shortten (x:xs)                   = x:shortten xs
+
+save xs = (length xs -) . length . shortten $ xs

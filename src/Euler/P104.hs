@@ -40,4 +40,4 @@ last10pand n = go 1 n []
 isPandPrefix n = '0' `notElem` hd &&  (length . nub) hd == 9
     where hd = take 9 . show $ n
 
-euler = head . map (index) . filter (isPandPrefix.v).  filter (last10pand.tl) $ fibs
+euler = index . head . filter (isPandPrefix.v) . filter (last10pand.tl) $ fibs

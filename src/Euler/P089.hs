@@ -81,4 +81,10 @@ sub xs@(x:xs') spec@(from, to)
    | otherwise             = x  :  sub xs' spec
     where left = drop (length from) xs
 
-subs xs = foldl sub xs [("VIIII","IX"), ("IIII","IV"), ("LXXXX","XC"), ("XXXX","XL"), ("DCCCC","CM"), ("CCCC","CD")]
+subs xs = foldl sub xs [ ("VIIII", "IX")
+                       , ("IIII",  "IV")
+                       , ("LXXXX", "XC")
+                       , ("XXXX",  "XL")
+                       , ("DCCCC", "CM")
+                       , ("CCCC",  "CD")
+                       ]

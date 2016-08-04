@@ -73,4 +73,12 @@ shortten ('D':'C':'C':'C':'C':xs) = 'C':'M':shortten xs
 shortten ('C':'C':'C':'C':xs)     = 'C':'D':shortten xs
 shortten (x:xs)                   = x:shortten xs
 
-save xs = (length xs -) . length . shortten $ xs
+save xs = (length xs -) . length . subs $ xs
+
+sub [] _ = []
+sub xs@(x:xs') spec@(from, to)
+   | from `isPrefixOf` xs  = to ++ sub left spec
+   | otherwise             = x  :  sub xs' spec
+    where left = drop (length from) xs
+
+subs xs = foldl sub xs [("VIIII","IX"), ("IIII","IV"), ("LXXXX","XC"), ("XXXX","XL"), ("DCCCC","CM"), ("CCCC","CD")]

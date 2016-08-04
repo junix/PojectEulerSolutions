@@ -1,5 +1,8 @@
 module P084 where
 import qualified Data.Map.Strict as M
+import Data.List (sort,group)
+import Data.Ratio
+
 {-
 In the game, Monopoly, the standard board is set up in the following way:
 
@@ -79,9 +82,28 @@ six-digit modal string.
 
 data Pos = GO|A1|CC1|A2|T1|R1|B1|CH1|B2|B3|JAIL|C1|U1|C2|C3|R2|D1|CC2|D2|D3|FP|E1|CH2|E2|E3|R3|F1|F2|U2|F3|G2J|G1|G2|CC3|G3|R4|CH3|H1|T2|H2 deriving (Eq,Ord,Show,Read,Enum)
 
+data Prob = Prob {pos :: Pos, prob :: Ratio Int} deriving (Show)
+
 pdict = M.fromList . zip [GO .. H2] $ [0..]
 cdict = M.fromList . zip [0..] $ [GO .. H2]
 
-pos p = pdict M.! p
+getPos p = pdict M.! p
 
 card p = cdict M.! (p `rem` 40)
+
+forward p 0  = p
+forward H2 c = forward GO (c-1)
+forward p c  = forward (succ p) (c-1)
+
+back p 0  = p
+back GO c = back H2 (c-1)
+back p c  = back (pred p) (c-1)
+
+steps = map (\(x:xs) -> (x, (length xs+1) % len)) . group $ poss
+    where poss = sort [x+y | x <- [1..6], y <- [1..6]]
+          len = length poss
+
+go (Prob {pos = x, prob = y}) [] = []
+go c@(Prob {pos = x, prob = y}) ((n,p):xs) = Prob { pos = forward x n, prob = y * p} : go c xs
+
+

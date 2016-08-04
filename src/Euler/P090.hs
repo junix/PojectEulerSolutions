@@ -50,5 +50,3 @@ canCube xs ys = all (sepIn xs ys) [(0,1),(0,4),(0,9),(1,6),(2,5),(3,6),(4,9),(6,
 
 euler = [ (xs,ys) | xs <- comb, ys <- comb, ys > xs, canCube xs ys ]
 
-
-

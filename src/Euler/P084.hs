@@ -1,4 +1,5 @@
 module P084 where
+import qualified Data.Map.Strict as M
 {-
 In the game, Monopoly, the standard board is set up in the following way:
 
@@ -13,6 +14,7 @@ In the game, Monopoly, the standard board is set up in the following way:
              G2                                          D2
              G1                                          D3
              G2J  F3  U2   F2  F1  R3  E3  E2   CH2  E1  FP
+
 
 A player starts on the GO square and adds the scores on two 6-sided dice
 to determine the number of squares they advance in a clockwise direction.
@@ -75,4 +77,11 @@ If, instead of using two 6-sided dice, two 4-sided dice are used, find the
 six-digit modal string.
 -}
 
+data Pos = GO|A1|CC1|A2|T1|R1|B1|CH1|B2|B3|JAIL|C1|U1|C2|C3|R2|D1|CC2|D2|D3|FP|E1|CH2|E2|E3|R3|F1|F2|U2|F3|G2J|G1|G2|CC3|G3|R4|CH3|H1|T2|H2 deriving (Eq,Ord,Show,Read,Enum)
 
+pdict = M.fromList . zip [GO .. H2] $ [0..]
+cdict = M.fromList . zip [0..] $ [GO .. H2]
+
+pos p = pdict M.! p
+
+card p = cdict M.! (p `rem` 40)

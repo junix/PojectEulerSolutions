@@ -3,6 +3,7 @@ import Data.List (delete,permutations,nub,sort)
 import Data.Maybe (maybeToList)
 import qualified Data.IntSet as S
 import Data.Ratio
+import Data.Function
 {-
 By using each of the digits from the set, {1, 2, 3, 4}, exactly once, and
 making use of the four arithmetic operations (+, , *, /) and
@@ -37,14 +38,12 @@ opseq :: [Ratio Int -> Ratio Int -> [Ratio Int]]
 opseq = [ad,sb,mt,qt]
 
 gen :: [Int] -> (Int,[Int])
-gen ds = (\x->(x,ds)) . maxSeqNo . S.toList . S.fromList . calc . map (%1) $ ds
+gen ds = flip (,) ds . maxSeqNo . S.toList . S.fromList . calc . map (%1) $ ds
 
 ad x y = [x+y]
 sb x y = [x-y]
 mt x y = [x*y]
-qt x y
-    | y == 0 = []
-    | otherwise = [x/y]
+qt x y = if y == 0 then [] else [x/y]
 
 calc :: [Ratio Int] -> [Int]
 calc [] = []
@@ -59,14 +58,12 @@ maxSeqNo xs = go xs 1 0
 
 op :: ([Ratio Int], [Ratio Int]) -> [[Ratio Int]]
 op ([x,y],xs) = concatMap exe $ opseq
-    where exe f = do
-              v <- f x y
-              [v:xs]
+    where exe f = do { v <- f x y; [v:xs] }
 
-sel n xs = concatMap (\(as,bs) -> [(as,bs), (reverse as,bs)]) .
-           map (\(as,bs) ->(sort as, sort bs)) $
-           go n xs []
-    where go 0 xs acc = [([], xs++acc)]
+sel n xs = concatMap addRev . map sortPair $ go n xs []
+    where addRev (as,bs) = [(as,bs), (reverse as,bs)]
+          sortPair pair = uncurry ((,) `on` sort) pair
+          go 0 xs acc = [([], xs++acc)]
           go n [] acc = []
           go n (x:xs) acc = map join seled ++ skiped
             where join (ss, rs) = (x:ss, rs)

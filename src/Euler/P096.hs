@@ -90,10 +90,9 @@ collectEmptyPos mat = sortBy (compare `on` (length.snd)) $
     , let probCells = [1..9] \\ cells
     ]
 
-solve mat = case cs of
-               [] -> [mat]
-               ((pos,[]):_) -> []
-               ((pos,vs):_) -> concat [ solve m | v <- vs, let m  = writeCell mat pos v]
-    where cs = collectEmptyPos mat
+solve mat = go . collectEmptyPos $ mat
+    where go [] = [mat]
+          go ((pos,[]):_) = []
+          go ((pos,vs):_) = take 1 . concatMap (solve . writeCell mat pos) $ vs
 
 euler c = sum . map leftTop3 . concatMap solve . buildSudokuList . lines $ c

@@ -1,7 +1,6 @@
 {-# LANGUAGE ParallelListComp #-}
-{-# LANGUAGE ViewPatterns #-}
-import qualified Data.Map as M
 import Data.List (nub, (\\), sortBy)
+import Data.List.Split (chunksOf)
 import Data.Function (on)
 import Data.Char
 import Control.Lens
@@ -45,54 +44,26 @@ the top left corner of each solution grid; for example, 483 is the 3-digit
 number found in the top left corner of the solution grid above.
 -}
 
-type Sudoku = [[Integer]]
-
-main = do
-    c <- readFile "./p096_sudoku.txt"
-    print (euler c)
-
-buildSudokuList :: [String] -> [Sudoku]
-buildSudokuList [] = []
-buildSudokuList (('G':_):xs) = mat : buildSudokuList r
-    where (s, r) = splitAt 9 xs
-          mat = [map ordx l| l <- take 9 s]
-
-leftTop3 mat = a * 100 + b * 10 + c
-    where [a,b,c] = take 3 . head $ mat
-
-ordx :: Char -> Integer
-ordx = toInteger . (subtract b) . ord
-    where b = ord '0'
-
+buildSudokuList xs = map (map (map ordx)) . map tail . chunksOf 10 $ xs
+leftTop3 mat = sum [d*(10^e) | d <- take 3 . head $ mat | e <- [2,1..0]]
+ordx = toInteger . (subtract.ord $ '0') . ord
 readCell mat (x,y) = mat !! y !! x
-
 writeCell mat (x,y) v = mat & ix y .~ ((mat !! y) & ix x .~ v)
-
-readCells mat poss = filter (>0) . map (readCell mat) $ poss
-
-calcCells (x,y) = [ (a+dx, b+dy) | a <- [0..2]
-                                 , b <- [0..2]
-                                 ] ++
-                  map ((,) x)      [0..8] ++
-                  map (flip (,) y) [0..8]
+probCells mat poss = ([1..9] \\) . filter (>0) . map (readCell mat) $ poss
+calcCells (x,y) = smallGrid ++ rowCells ++ colCells
     where mov n = n - (n `rem` 3)
-          dx = mov x
-          dy = mov y
-
+          smallGrid = [(a+dx, b+dy) | let dx = mov x, let dy = mov y, a <- [0..2] , b <- [0..2] ]
+          rowCells  = [(x,v) | v <- [0..8]]
+          colCells  = [(v,y) | v <- [0..8]]
 collectEmptyPos mat = sortBy (compare `on` (length.snd)) $
-    [ (pos, probCells)
-    | x <- [0..8]
-    , y <- [0..8]
-    , let pos = (x,y)
-    , let v = readCell mat pos
-    , v == 0
-    , let cells = readCells mat (calcCells pos)
-    , let probCells = [1..9] \\ cells
+    [ (pos, cells) | pos <- allPos
+    , readCell mat pos == 0
+    , let cells = probCells mat . calcCells $ pos
     ]
-
+    where allPos = [ (x, y) | x <- [0..8] , y <- [0..8] ]
 solve mat = go . collectEmptyPos $ mat
     where go [] = [mat]
           go ((pos,[]):_) = []
           go ((pos,vs):_) = take 1 . concatMap (solve . writeCell mat pos) $ vs
-
 euler c = sum . map leftTop3 . concatMap solve . buildSudokuList . lines $ c
+main = readFile "./p096_sudoku.txt" >>= print.euler

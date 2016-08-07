@@ -1,4 +1,11 @@
 {-# LANGUAGE ParallelListComp #-}
+{-# LANGUAGE ViewPatterns #-}
+import qualified Data.Map as M
+import Data.List (nub, (\\), sortBy)
+import Data.Function (on)
+import Data.Char
+import Control.Lens
+
 {-
 Su Doku (Japanese meaning number place) is the name given to a popular
 puzzle concept. Its origin is unclear, but credit must be attributed to
@@ -38,4 +45,55 @@ the top left corner of each solution grid; for example, 483 is the 3-digit
 number found in the top left corner of the solution grid above.
 -}
 
+type Sudoku = [[Integer]]
 
+main = do
+    c <- readFile "./p096_sudoku.txt"
+    print (euler c)
+
+buildSudokuList :: [String] -> [Sudoku]
+buildSudokuList [] = []
+buildSudokuList (('G':_):xs) = mat : buildSudokuList r
+    where (s, r) = splitAt 9 xs
+          mat = [map ordx l| l <- take 9 s]
+
+leftTop3 mat = a * 100 + b * 10 + c
+    where [a,b,c] = take 3 . head $ mat
+
+ordx :: Char -> Integer
+ordx = toInteger . (subtract b) . ord
+    where b = ord '0'
+
+readCell mat (x,y) = mat !! y !! x
+
+writeCell mat (x,y) v = mat & ix y .~ ((mat !! y) & ix x .~ v)
+
+readCells mat poss = filter (>0) . map (readCell mat) $ poss
+
+calcCells (x,y) = [ (a+dx, b+dy) | a <- [0..2]
+                                 , b <- [0..2]
+                                 ] ++
+                  map ((,) x)      [0..8] ++
+                  map (flip (,) y) [0..8]
+    where mov n = n - (n `rem` 3)
+          dx = mov x
+          dy = mov y
+
+collectEmptyPos mat = sortBy (compare `on` (length.snd)) $
+    [ (pos, probCells)
+    | x <- [0..8]
+    , y <- [0..8]
+    , let pos = (x,y)
+    , let v = readCell mat pos
+    , v == 0
+    , let cells = readCells mat (calcCells pos)
+    , let probCells = [1..9] \\ cells
+    ]
+
+solve mat = case cs of
+               [] -> [mat]
+               ((pos,[]):_) -> []
+               ((pos,vs):_) -> concat [ solve m | v <- vs, let m  = writeCell mat pos v]
+    where cs = collectEmptyPos mat
+
+euler c = sum . map leftTop3 . concatMap solve . buildSudokuList . lines $ c

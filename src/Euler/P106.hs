@@ -23,19 +23,23 @@ to be tested for equality?
 
 NOTE: This problem is related to problems 103 and 105.
 -}
+-- generate all subset
 allSet []     = [[]]
 allSet (x:xs) = map (x:) subSet ++ subSet
     where subSet = allSet xs
 
+-- group same length subset together
 groupedSet xs = groupBy ((==) `on` length) . sortBy  (compare `on` length) . sort . allSet $ xs
 
+-- calc how many cmp in this set
 calcCheckCnt []   = 0
 calcCheckCnt [xs] = 0
 calcCheckCnt (xs:xss) = (length . filter (needCmp xs)) xss + calcCheckCnt xss
 
 p106 xs = sum . map calcCheckCnt . groupedSet $ xs
 
-needCmp xs ys = length xs /= 1 && length ys /= 1 &&
+-- whether need cmp
+needCmp xs ys = length xs > 1 &&
                 (null $ xs `intersect` ys) &&
                 (((/=1).length.nub) [ x `compare` y | x <- xs | y <- ys])
 

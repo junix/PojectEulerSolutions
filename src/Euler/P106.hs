@@ -24,12 +24,12 @@ to be tested for equality?
 NOTE: This problem is related to problems 103 and 105.
 -}
 -- generate all subset
-allSet []     = [[]]
-allSet (x:xs) = map (x:) subSet ++ subSet
-    where subSet = allSet xs
+powerset []     = [[]]
+powerset (x:xs) = map (x:) subSet ++ subSet
+    where subSet = powerset xs
 
 -- group same length subset together
-groupedSet xs = groupBy ((==) `on` length) . sortBy  (compare `on` length) . sort . allSet $ xs
+groupedSet xs = groupBy ((==) `on` length) . sortBy  (compare `on` length) . sort . powerset $ xs
 
 -- calc how many cmp in this set
 calcCheckCnt []   = 0

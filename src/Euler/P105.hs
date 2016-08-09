@@ -1,5 +1,5 @@
 module Euler.P105 where
-import Data.List (nub, minimumBy,sort,groupBy, sortBy)
+import Data.List (nub, sort,groupBy, sortBy)
 import Data.Function(on)
 
 genSet []     = [[]]

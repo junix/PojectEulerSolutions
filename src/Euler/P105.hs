@@ -6,18 +6,29 @@ genSet [] = [[]]
 genSet (x:xs) = subset ++ map (x:) subset
     where subset = genSet xs
 
-allSet xs = tail . genSet $ xs
+noneEmptySubSet :: [Integer] -> [[Integer]]
+noneEmptySubSet = tail . genSet
 
 verify xs = go vs
-    where xss = sortBy (compare `on` length). allSet $ xs
-          vs = map sort . map (map sum) . groupBy (\as bs -> length as == length bs) $ xss
-          uniq xs = (length.nub) xs == length xs
-          go [] = True
-          go [xs] = uniq xs
-          go (xs:ys:xss) = last xs < head ys && uniq xs && go (ys:xss)
+    where vs = map (sort . map sum)         .
+               groupBy ((==) `on` length)   .
+               sortBy (compare `on` length) .
+               noneEmptySubSet              $
+               xs
+          isUniq xs = (length.nub) xs == length xs
+          go []          = True
+          go [xs]        = isUniq xs
+          go (xs:ys:xss) = last xs < head ys && isUniq xs && go (ys:xss)
 
 main = do
     c <- readFile "./p105_sets.txt"
     print (sum . map sum . filter verify . map parseVec . lines $ c)
+
+euler :: String -> Integer
+euler = sum           .
+        map sum       .
+        filter verify .
+        map parseVec  .
+        lines
 
 parseVec xs = read ('[':xs++"]") :: [Integer]

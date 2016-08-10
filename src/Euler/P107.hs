@@ -39,12 +39,12 @@ and given in matrix form, find the maximum saving which can be achieved by
 removing redundant edges whilst ensuring that the network remains connected.
 -}
 
-type G = [[(Integer, Integer)]]
-type NS = S.Set Integer
+type G = [[((Integer, Integer),Integer)]]
+type NodeSet = S.Set Integer
 
 main = do
     c <- readFile "p107_network.txt"
-    mapM_ print (parseG . parseMat $ c)
+    print (isFullConnected . parseG . parseMat $ c)
 
 parseMat :: String -> [[Maybe Integer]]
 parseMat = map (map str2v.wordsBy (==',')). lines
@@ -53,20 +53,24 @@ str2v :: String -> Maybe Integer
 str2v "-" = Nothing
 str2v xs  = Just (read xs)
 
-parseG :: [[Maybe Integer]] -> [[(Integer, Integer)]]
-parseG xss = [ catMaybes [ (,) <$> ix <*> x
+parseG :: [[Maybe Integer]] -> G
+parseG xss = [ catMaybes [ (,) <$> Just (ir,ix) <*> x
                          | x <- xs
-                         | ix <- sequence (Just [1..])
+                         | ix <- [0..]
                          ]
              | xs <- xss
+             | ir <- [0..]
              ]
 
-conClosure :: Integer -> G -> NS
+conClosure :: Integer -> G -> NodeSet
 conClosure x g = go (S.insert x . nei $ x) (S.fromList [x])
-    where nei n = S.fromList . map fst . (!! fromInteger n) $ g
-          go :: NS -> NS -> NS
+    where nei n = S.fromList . map (snd.fst) . (!! fromInteger n) $ g
           go ns cs
             | null diff = ns
             | otherwise = let v = head diff
                           in go (ns `S.union` nei v) (S.insert v cs)
             where diff = S.toList (ns S.\\ cs)
+
+isFullConnected g = S.size (conClosure 0  g) == length g
+
+deleteEdge x y g = [ [(e,w)| (e,w) <- rs, e /= (x,y), e /= (y,x)] | rs <- g ]

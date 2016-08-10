@@ -24,23 +24,24 @@ to be tested for equality?
 NOTE: This problem is related to problems 103 and 105.
 -}
 -- generate all subset
-powerset []     = [[]]
-powerset (x:xs) = map (x:) subSet ++ subSet
-    where subSet = powerset xs
+powerSet []     = [[]]
+powerSet (x:xs) = map (x:) subSet ++ subSet
+    where subSet = powerSet xs
 
 -- group same length subset together
-groupedSet xs = groupBy ((==) `on` length) . sortBy  (compare `on` length) . sort . powerset $ xs
+groupedSet = groupBy ((==) `on` length) .
+                sortBy  (compare `on` length) . sort . powerSet
 
 -- calc how many cmp in this set
 calcCheckCnt []   = 0
 calcCheckCnt [xs] = 0
 calcCheckCnt (xs:xss) = (length . filter (needCmp xs)) xss + calcCheckCnt xss
 
-p106 xs = sum . map calcCheckCnt . groupedSet $ xs
+p106 = sum . map calcCheckCnt . groupedSet
 
 -- whether need cmp
 needCmp xs ys = length xs > 1 &&
-                (null $ xs `intersect` ys) &&
-                (((/=1).length.nub) [ x `compare` y | x <- xs | y <- ys])
+                null (xs `intersect` ys) &&
+                ((/=1).length.nub $ [ x `compare` y | x <- xs | y <- ys])
 
 main = print.p106 $ ['a'..'l']

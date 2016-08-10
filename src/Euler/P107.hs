@@ -3,6 +3,8 @@
 module P107 where
 import Data.List.Split (wordsBy)
 import Data.Maybe
+import Data.List (minimumBy)
+import Data.Function(on)
 import qualified  Data.Map as M
 import qualified  Data.Set as S
 {-
@@ -39,12 +41,15 @@ and given in matrix form, find the maximum saving which can be achieved by
 removing redundant edges whilst ensuring that the network remains connected.
 -}
 
-type G = [[((Integer, Integer),Integer)]]
-type NodeSet = S.Set Integer
+type V = Integer
+type E = (V, V)
+type W = Integer
+type G = [[(E, W)]]
+type VSet = S.Set V
 
 main = do
     c <- readFile "p107_network.txt"
-    print (isFullConnected . parseG . parseMat $ c)
+    print (minSpan . parseG . parseMat $ c)
 
 parseMat :: String -> [[Maybe Integer]]
 parseMat = map (map str2v.wordsBy (==',')). lines
@@ -62,15 +67,25 @@ parseG xss = [ catMaybes [ (,) <$> Just (ir,ix) <*> x
              | ir <- [0..]
              ]
 
-conClosure :: Integer -> G -> NodeSet
-conClosure x g = go (S.insert x . nei $ x) (S.fromList [x])
-    where nei n = S.fromList . map (snd.fst) . (!! fromInteger n) $ g
-          go ns cs
-            | null diff = ns
-            | otherwise = let v = head diff
-                          in go (ns `S.union` nei v) (S.insert v cs)
-            where diff = S.toList (ns S.\\ cs)
+minimumV :: G -> (E,V)
+minimumV = minimumBy (compare `on` snd) . concat
 
-isFullConnected g = S.size (conClosure 0  g) == length g
+minimumVFrom :: G -> VSet -> (E,V)
+minimumVFrom g vSet = minimumV g'
+    where g' = map ((g!!).fromInteger) . S.toList $ vSet
 
-deleteEdge x y g = [ [(e,w)| (e,w) <- rs, e /= (x,y), e /= (y,x)] | rs <- g ]
+deleteInnerEdges vSet g = [ [ ew | ew@((s,e), w) <- xs , S.notMember s vSet || S.notMember e vSet ] | xs <- g]
+
+minSpan g = weight g - sum (go initVSet [w] (deleteInnerEdges initVSet g))
+    where ((s,e), w) = minimumV g
+          initVSet   = S.fromList [s,e]
+          go vSet ws graph
+            | S.size vSet == length g = ws
+            | otherwise               = go vSet' ws' graph'
+            where ((s',e'),w') = minimumVFrom graph vSet
+                  vSet'        = S.insert s' . S.insert e' $ vSet
+                  ws'          = w' : ws
+                  graph'       = deleteInnerEdges vSet' graph
+
+weight :: G -> W
+weight = (`quot` 2) . sum . concatMap (map snd)

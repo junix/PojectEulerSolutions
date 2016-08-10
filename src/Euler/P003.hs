@@ -4,7 +4,7 @@ primes = filterPrime [2..]
   where filterPrime (p:xs) =
           p : filterPrime [x | x <- xs, x `mod` p /= 0]
 
-maxFactor n = go primes n
+maxFactor = go primes
     where go (x:xs) v
             | x > v     = v
             | r == 0    = max x (go primes d)

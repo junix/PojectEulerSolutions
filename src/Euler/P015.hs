@@ -20,7 +20,7 @@ routes l w = state $ \s ->
                                         }) s
             in (c', M.insert (l,w) c' s')
 
-calc n = fst $ runState (routes n n) M.empty
+calc n = evalState (routes n n) M.empty
 euler15 = calc 20
 
 

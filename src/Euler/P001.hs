@@ -5,10 +5,10 @@ If we list all the natural numbers below 10 that are multiples of 3 or 5, we get
 Find the sum of all the multiples of 3 or 5 below 1000.
 -}
 
-compof35 n
+compOf35 n
     | n `rem` 3 == 0 = True
     | n `rem` 5 == 0 = True
     | otherwise      = False
 
-seq35 = sum . filter compof35 $ [3..999]
+seq35 = sum . filter compOf35 $ [3..999]
 

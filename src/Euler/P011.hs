@@ -62,7 +62,7 @@ dia :: (Int, Int) -> Maybe Int
 dia (x,y) = maximum [prod d | d <- [movL, movR]]
     where movL d = (x-d, y+d)
           movR d = (x+d, y+d)
-          prod mov = product <$> (sequence . map (get.mov) $ [0..3])
+          prod mov = product <$> mapM (get.mov) [0..3]
 
 main = print $ maximum . map dia $ [(x,y) | x <- [0..19], y<- [0..19]]
 

@@ -8,7 +8,7 @@ Find the sum of all the multiples of 3 or 5 below 1000.
 compOf35 n
     | n `rem` 3 == 0 = True
     | n `rem` 5 == 0 = True
-    | otherwise      = False
+    | otherwise     = False
 
 seq35 = sum . filter compOf35 $ [3..999]
 

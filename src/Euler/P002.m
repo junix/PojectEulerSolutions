@@ -4,7 +4,7 @@
 (* :Title: P002 *)
 (* :Context: P002` *)
 (* :Author: junix *)
-(* :Date: 2016-08-13 *)
+(* :Date: 2016-08-14 *)
 
 (* :Package Version: 0.1 *)
 (* :Mathematica Version: *)
@@ -15,13 +15,14 @@
 BeginPackage["P002`"]
 (* Exported symbols added here with SymbolName::usage *)
 
-
-Fib[x]::usage="fib func"
+P002[]::usage="sum of fib seq"
 
 Begin["`Private`"]
+sumOfFib[n_] := 0 /; Fibonacci[n] > 4000000
+sumOfFib[n_] := Fibonacci[n] + sumOfFib[n + 1] /; EvenQ@Fibonacci[n]
+sumOfFib[n_] := sumOfFib[n + 1] /; OddQ@Fibonacci[n]
 
-Fib[x_] := x/;x<2
-Fib[x_] := Fib[x-1] + Fib[x-2]/;x>=2
+P002[] = sumOfFib[0]
 
 End[] (* `Private` *)
 

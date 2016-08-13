@@ -15,10 +15,12 @@
 BeginPackage["P001`"]
 (* Exported symbols added here with SymbolName::usage *)
 
+P001::usage="get the sum"
+
 Begin["`Private`"]
 
 End[] (* `Private` *)
 
-Plus@@Select[Range[999],(Mod[#,3]==0 || Mod[#,5]==0)&]
+P001[] = Plus@@Select[Range[999],(Mod[#,3]==0 || Mod[#,5]==0)&]
 
 EndPackage[]

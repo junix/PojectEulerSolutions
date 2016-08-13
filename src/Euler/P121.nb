@@ -1,0 +1,266 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      7781,        256]
+NotebookOptionsPosition[      6384,        207]
+NotebookOutlinePosition[      6743,        223]
+CellTagsIndexPosition[      6700,        220]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"5", "!"}]}]], "Input",
+ CellChangeTimes->{{3.680085021880027*^9, 3.6800850233674088`*^9}}],
+
+Cell[BoxData["120"], "Output",
+ CellChangeTimes->{3.6800850240222883`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"f", 
+    RowBox[{"(", "x_", ")"}]}], " ", ":=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     FractionBox["1", "x"], ",", 
+     FractionBox[
+      RowBox[{"x", "-", "1"}], "x"]}], "}"}]}]}]], "Input",
+ CellChangeTimes->{{3.680085078021111*^9, 3.680085191546221*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"SetDelayed", "::", "write"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Tag \[NoBreak]\\!\\(Times\\)\[NoBreak] in \
+\[NoBreak]\\!\\(f\\\\ x_\\)\[NoBreak] is Protected. \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/write\\\", ButtonNote -> \
+\\\"SetDelayed::write\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.68008515460676*^9, 3.680085158625052*^9}, 
+   3.680085191999338*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"c", "[", "n_", "]"}], " ", ":=", " ", 
+  RowBox[{
+   FractionBox[
+    RowBox[{
+     UnderoverscriptBox["\[Product]", 
+      RowBox[{"i", "=", 
+       RowBox[{"15", "-", "n", "+", "1"}]}], "15"], "i"}], 
+    RowBox[{
+     UnderoverscriptBox["\[Product]", 
+      RowBox[{"i", "=", "1"}], "n"], "i"}]], "  ", "n"}]}]], "Input",
+ CellChangeTimes->{{3.680087629780476*^9, 3.680087647186166*^9}, {
+   3.680087684452794*^9, 3.680087748180814*^9}, {3.680087783243338*^9, 
+   3.680087804678711*^9}, {3.6800878762278976`*^9, 3.680087980029059*^9}, 
+   3.680088015655774*^9, 3.680088124316299*^9, 3.680088161723206*^9}],
+
+Cell[BoxData[
+ RowBox[{"Sum", "[", 
+  RowBox[{
+   RowBox[{"c", "[", "i", "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"i", ",", "1", ",", "15"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.680087896132016*^9, 3.68008790022991*^9}, {
+  3.680088021399226*^9, 3.680088022176832*^9}, {3.680088133612558*^9, 
+  3.6800881771552477`*^9}, {3.6800883145774183`*^9, 3.680088343027326*^9}}],
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"x", "+", "1"}], ")"}], 
+    RowBox[{"(", 
+     RowBox[{"x", "+", "2"}], ")"}], 
+    RowBox[{"(", 
+     RowBox[{"x", "+", "3"}], ")"}], 
+    RowBox[{"(", 
+     RowBox[{"x", "+", "4"}], ")"}]}], " ", "//", " ", "Expand"}]}]], "Input",
+ 
+ CellChangeTimes->{{3.680090181285531*^9, 3.680090185794099*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"24", "+", 
+   RowBox[{"50", " ", "x"}], "+", 
+   RowBox[{"35", " ", 
+    SuperscriptBox["x", "2"]}], "+", 
+   RowBox[{"10", " ", 
+    SuperscriptBox["x", "3"]}], "+", 
+   SuperscriptBox["x", "4"]}], " ", "/.", 
+  RowBox[{"{", 
+   RowBox[{"x", "\[Rule]", "1"}], "}"}]}]], "Input",
+ CellChangeTimes->{{3.680090207488772*^9, 3.680090220843931*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Product", "[", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"x", "+", "i"}], ")"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"i", ",", "1", ",", "15"}], "}"}]}], "]"}], "/.", 
+  RowBox[{"{", 
+   RowBox[{"x", "\[Rule]", "1"}], "}"}]}]], "Input",
+ CellChangeTimes->{{3.680090262884873*^9, 3.680090299725649*^9}, {
+  3.680090358886635*^9, 3.6800903660210447`*^9}}],
+
+Cell[BoxData["20922789888000"], "Output",
+ CellChangeTimes->{{3.6800902941776323`*^9, 3.680090300603155*^9}, 
+   3.680090367120483*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"PolynomialMod", "[", 
+    RowBox[{
+     RowBox[{"Product", "[", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"x", "+", "i"}], ")"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", "15"}], "}"}]}], "]"}], ",", 
+     SuperscriptBox["x", "8"]}], "]"}], "/.", 
+   RowBox[{"{", 
+    RowBox[{"x", "\[Rule]", "1"}], "}"}]}]}]], "Input",
+ CellChangeTimes->{{3.680090374585656*^9, 3.68009042113678*^9}, {
+  3.68009045199527*^9, 3.6800904784376717`*^9}, {3.680090671738781*^9, 
+  3.680090673672195*^9}}],
+
+Cell[BoxData["20913570481057"], "Output",
+ CellChangeTimes->{3.680090602077389*^9, 3.6800906757150707`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"20922789888000", "-", "20913570481057"}]], "Input",
+ CellChangeTimes->{{3.6800904944261713`*^9, 3.680090496242113*^9}, {
+   3.680090611107152*^9, 3.680090612662733*^9}, 3.680090681108746*^9}],
+
+Cell[BoxData["9219406943"], "Output",
+ CellChangeTimes->{3.680090613205658*^9, 3.6800906826940947`*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ FractionBox["63850536496", "20922789888000"]], "Input",
+ CellChangeTimes->{{3.680090505367095*^9, 3.68009052849303*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.6800905546364527`*^9, 3.680090564812574*^9}, {
+  3.6800906204740353`*^9, 3.680090621725267*^9}, {3.680090688266775*^9, 
+  3.6800907171397142`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["20922789888000", "9219406943"], " ", "//", " ", "N"}]], "Input",
+ CellChangeTimes->{{3.680090691666791*^9, 3.6800906929835863`*^9}}],
+
+Cell[BoxData["2269.4290443363066`"], "Output",
+ CellChangeTimes->{3.680090693425865*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.680090624962409*^9, 3.6800906261645727`*^9}, 
+   3.6800906990109167`*^9}],
+
+Cell[BoxData["327.6838541413154`"], "Output",
+ CellChangeTimes->{3.6800906265945473`*^9}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.680090572304284*^9, 3.680090578171426*^9}, {
+  3.680090702747252*^9, 3.6800907068021107`*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.6800906510459833`*^9, 3.6800906514863863`*^9}, 
+   3.6800907118790417`*^9}]
+},
+WindowSize->{808, 911},
+WindowMargins->{{433, Automatic}, {53, Automatic}},
+FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September 9, \
+2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 171, 3, 63, "Input"],
+Cell[754, 27, 74, 1, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[865, 33, 331, 10, 66, "Input"],
+Cell[1199, 45, 533, 11, 24, "Message"]
+}, Open  ]],
+Cell[1747, 59, 643, 15, 54, InheritFromParent],
+Cell[2393, 76, 381, 8, 28, "Input"],
+Cell[2777, 86, 402, 13, 46, InheritFromParent],
+Cell[3182, 101, 380, 11, 32, InheritFromParent],
+Cell[CellGroupData[{
+Cell[3587, 116, 391, 11, 28, InheritFromParent],
+Cell[3981, 129, 135, 2, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4153, 136, 587, 16, 52, "Input"],
+Cell[4743, 154, 107, 1, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4887, 160, 215, 3, 28, InheritFromParent],
+Cell[5105, 165, 103, 1, 28, "Output"]
+}, Open  ]],
+Cell[5223, 169, 135, 2, 49, InheritFromParent],
+Cell[5361, 173, 196, 3, 28, InheritFromParent],
+Cell[CellGroupData[{
+Cell[5582, 180, 171, 3, 49, InheritFromParent],
+Cell[5756, 185, 88, 1, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5881, 191, 122, 2, 28, InheritFromParent],
+Cell[6006, 195, 89, 1, 28, "Output"]
+}, Open  ]],
+Cell[6110, 199, 143, 2, 28, InheritFromParent],
+Cell[6256, 203, 124, 2, 28, InheritFromParent]
+}
+]
+*)
+
+(* End of internal cache information *)
+

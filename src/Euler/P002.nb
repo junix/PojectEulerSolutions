@@ -1,0 +1,196 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      5755,        186]
+NotebookOptionsPosition[      4988,        153]
+NotebookOutlinePosition[      5347,        169]
+CellTagsIndexPosition[      5304,        166]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  
+  RowBox[{
+   RowBox[{
+    RowBox[{"feasible", "=", 
+     RowBox[{"Reap", "[", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"lo", "=", "0"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"hi", "=", "1"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"While", " ", "[", 
+        RowBox[{
+         RowBox[{"hi", "<", "1000000"}], ",", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"lo", ",", "hi"}], "}"}], "=", 
+           RowBox[{"{", 
+            RowBox[{"hi", ",", 
+             RowBox[{"lo", "+", "hi"}]}], "}"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{"EvenQ", "@", "hi"}], ",", 
+            RowBox[{"Sow", "[", "hi", "]"}]}], "]"}]}]}], 
+        "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}]}], ";"}],
+    "\[IndentingNewLine]", "\[IndentingNewLine]", "\n", 
+   RowBox[{"Plus", "@@", 
+    RowBox[{"Flatten", "@", 
+     RowBox[{"feasible", "[", 
+      RowBox[{"[", "2", "]"}], "]"}]}]}]}]}]], "Input",
+ CellChangeTimes->{{3.68011978009024*^9, 3.680119780824067*^9}, 
+   3.6801198513623533`*^9, {3.680119959847681*^9, 3.680119968342923*^9}, {
+   3.6801200227940817`*^9, 3.680120106385797*^9}}],
+
+Cell[BoxData["1089154"], "Output",
+ CellChangeTimes->{
+  3.680119781593225*^9, {3.680119948183549*^9, 3.680119972445022*^9}, 
+   3.6801200362329397`*^9, 3.68012008338492*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", "feasible"}]], "Input",
+ CellChangeTimes->{{3.6801198281196012`*^9, 3.680119832533393*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"Null", ",", 
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{
+     "2", ",", "8", ",", "34", ",", "144", ",", "610", ",", "2584", ",", 
+      "10946", ",", "46368", ",", "196418", ",", "832040"}], "}"}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.6801198353934727`*^9, 3.680119955071945*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{"FindRoot", "\[IndentingNewLine]", "feasible"}], "Input",
+ CellChangeTimes->{{3.680119978510936*^9, 3.680119978923032*^9}, {
+  3.68012008643567*^9, 3.680120087339343*^9}, {3.680120167232242*^9, 
+  3.680120168268338*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"Null", ",", 
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{
+     "2", ",", "8", ",", "34", ",", "144", ",", "610", ",", "2584", ",", 
+      "10946", ",", "46368", ",", "196418", ",", "832040"}], "}"}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.680119979434771*^9, 3.680120039789136*^9, 
+  3.6801200877251167`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{"feasible2", " ", "=", " ", 
+   RowBox[{"Reap", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"v", " ", "=", " ", "0"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"While", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Fibonacci", "@", "v"}], "<", "1000000"}], ",", 
+       "\[IndentingNewLine]", "          ", 
+       RowBox[{
+        RowBox[{"v", " ", "++"}], ";", "\[IndentingNewLine]", "          ", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"EvenQ", "@", 
+           RowBox[{"Fibonacci", "[", "v", "]"}]}], ",", " ", 
+          RowBox[{"Sow", "@", 
+           RowBox[{"Fibonacci", "[", "v", "]"}]}]}], "]"}]}]}], 
+      "\[IndentingNewLine]", "          ", "]"}]}], "\[IndentingNewLine]", 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.680120117651349*^9, 3.680120174198971*^9}, {
+  3.680120207526723*^9, 3.680120362880734*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"Null", ",", 
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{
+     "2", ",", "8", ",", "34", ",", "144", ",", "610", ",", "2584", ",", 
+      "10946", ",", "46368", ",", "196418", ",", "832040"}], "}"}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{{3.680120364346648*^9, 3.680120372005416*^9}, 
+   3.680120423299734*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{"Plus", "@@", 
+   RowBox[{"Flatten", "@", 
+    RowBox[{"feasible2", "[", 
+     RowBox[{"[", "2", "]"}], "]"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.680120377114567*^9, 3.6801204298579063`*^9}}],
+
+Cell[BoxData["1089154"], "Output",
+ CellChangeTimes->{{3.680120394855936*^9, 3.68012043182306*^9}}]
+}, Open  ]]
+},
+WindowSize->{808, 911},
+WindowMargins->{{448, Automatic}, {53, Automatic}},
+FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September 9, \
+2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 1336, 32, 250, "Input"],
+Cell[1919, 56, 174, 3, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2130, 64, 137, 2, 46, "Input"],
+Cell[2270, 68, 339, 9, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2646, 82, 234, 3, 46, "Input"],
+Cell[2883, 87, 364, 10, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3284, 102, 930, 22, 148, "Input"],
+Cell[4217, 126, 365, 10, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4619, 141, 251, 6, 46, "Input"],
+Cell[4873, 149, 99, 1, 28, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+

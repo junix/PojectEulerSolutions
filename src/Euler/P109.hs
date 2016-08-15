@@ -31,11 +31,9 @@ instance Eq CheckOut where
 instance Ord Dart where
     compare = compare `on` count
 
-allDarts = sortBy (flip compare) $ concat [[S v, D v, T v] | v <- [1..20]] ++ [S 25, D 25]
-allDDarts = sort $ D 25 : [D v | v <- [1..20]]
+allDarts = sortBy (flip compare) . (D 25:) . (S 25:) . concat $ [[S v, D v, T v] | v <- [1..20]]
 
-
-lastPos n = [ d | d <- allDDarts, count d <= n]
+lastPos n = [ D v | v <- [1..20]++[25], v <= n]
 
 posSeq 0 0 xs =  [[]]
 posSeq c 0 xs =  [[]]

@@ -8,6 +8,5 @@ modPow b e m = (v*v*v') `rem` m
           v      = modPow b q m
           v'     = modPow b r m
 
-euler = sum . take 40 .
-        filter ((==1).modPow 10 (10^10).(*9)) $
-        primes
+euler = sum . take 40 . filter canDivide $ primes
+        where canDivide x = modPow 10 (10^10) (x*9) == 1

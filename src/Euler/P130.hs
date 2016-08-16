@@ -10,8 +10,8 @@ a n = go 1 1
                      else go (x*10+1) (c+1)
 
 pseq = filter (\n -> (n-1) `rem` a n == 0) .
-       filter (not.isPrime)                .
-       filter (\x -> gcd 10 x == 1)        $
+       filter (\x -> gcd 10 x == 1)        .
+       filter (not.isPrime)                $
        [2..]
 
 euler = sum . take 25 $ pseq

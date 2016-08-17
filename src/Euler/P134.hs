@@ -6,25 +6,25 @@ import Data.List (isSuffixOf)
 pseq = reverse $ zip s (dropWhile (<=5) primes)
     where s =  dropWhile (<5). takeWhile (<=10^6) $ primes
 
-getCon :: (Integer, Integer) -> Integer
-getCon (a,b) = head [ v | n <- [3,5..], let v = n*b, a `isSuffix` v]
+con (a,b) = go 1 rb
+    where r = rem10 a
+          rb = r `rem` b
+          sr = b-a
+          go c y
+            | y == sr = c*r  + a
+            | otherwise = go (c+1) ((y+rb) `rem` b)
 
-getCon'' (a,b) = head [ v | n <- [1..], let v = n * base + a,  v `rem` b == 0]
-    where base = 10^(length (show a))
+rem10 :: Integer -> Integer
+rem10 = (10^) . ceiling . logBase 10 . fromInteger
 
-isSuffix 0 b = True
-isSuffix a b
-    | ra == rb = isSuffix qa qb
-    | otherwise = False
-    where (qa,ra) = a `quotRem` 10
-          (qb,rb) = b `quotRem` 10
+cont (a,b) = go 1 rb
+    where r = rem10 a
+          rb = b `rem` r
+          go c y = if y `rem` r == a
+                   then c*b
+                   else go (c+1) y'
+              where y' = (y + rb) `rem` r
 
-divideSet n [] = []
-divideSet n xs = take n xs : divideSet n (drop n xs)
-
-calc xs = sum  (map getCon'' xs)
-
---euler = (map (\xs -> (head xs,calc xs)) (divideSet 100 pseq) `using` parList rseq)
-euler = sum (map getCon'' pseq `using` parList rseq)
+euler = map con . reverse $ pseq
 
 main = print euler

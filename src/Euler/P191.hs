@@ -23,7 +23,6 @@ How many "prize" strings exist over a 30-day period?
 
 data Att = L | O | A deriving (Eq,Ord,Show)
 type Rule = ([Att], [Att])
-type Dict = M.Map (Rule,Integer) Integer
 
 nextR (_, ls)    O = ([A,A], ls)
 nextR (_, _)     L = ([A,A], [])

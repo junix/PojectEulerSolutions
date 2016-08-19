@@ -14,13 +14,18 @@
       <w>lenx</w>
       <w>nseq</w>
       <w>palind</w>
+      <w>printf</w>
+      <w>probs</w>
       <w>pseq</w>
+      <w>pyra</w>
       <w>rabc</w>
       <w>rpar</w>
+      <w>rseq</w>
       <w>shortten</w>
       <w>sseq</w>
       <w>sset</w>
       <w>strangeloop</w>
+      <w>uniq</w>
       <w>whitecoatcaptioning</w>
     </words>
   </dictionary>

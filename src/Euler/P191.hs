@@ -1,4 +1,6 @@
 module P191 where
+import Data.List (nub)
+import qualified Data.Map as M
 {-
 A particular school offers cash rewards to children with good attendance
 and punctuality. If they are absent for three consecutive days or late on
@@ -19,4 +21,33 @@ LAOO LAOA LAAO
 How many "prize" strings exist over a 30-day period?
 -}
 
+data Att = L | O | A deriving (Eq,Ord,Show)
+type Rule = ([Att], [Att])
+type Dict = M.Map (Rule,Integer) Integer
 
+nextR (_, ls)    O = ([A,A], ls)
+nextR (_, _)     L = ([A,A], [])
+nextR (_:xs, ls) A = (xs, ls)
+
+nextC ([],[]) = [O]
+nextC ([], _) = [O,L]
+nextC (_, []) = [O,A]
+nextC (_, _ ) = [O,L,A]
+
+nextS :: Rule -> [Rule]
+nextS r = map (nextR r) . nextC $ r
+
+rules = [ (replicate ac A, replicate lc L) | ac <- [0,1,2], lc <- [0,1]]
+
+update n dict = foldr (\r d -> M.insert r (count r (n-1)) d) dict rules
+    where count r c
+              | c < 0     = 1
+              | otherwise = sum . map (dict M.!) . nextS $ r
+
+steps n = go 0 (update 0 M.empty)
+    where go x d
+              | x >= n    = d
+              | otherwise = let x' = x + 1
+                            in  go x' (update x' d)
+
+euler n = steps n M.! ([A,A],[L])

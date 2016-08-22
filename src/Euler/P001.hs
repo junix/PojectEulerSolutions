@@ -11,4 +11,3 @@ compOf35 n
     | otherwise     = False
 
 seq35 = sum . filter compOf35 $ [3..999]
-

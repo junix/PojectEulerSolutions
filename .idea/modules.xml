@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/learn-haskell.iml" filepath="$PROJECT_DIR$/learn-haskell.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pe/pe.iml" filepath="$PROJECT_DIR$/pe/pe.iml" />
     </modules>
   </component>
 </project>

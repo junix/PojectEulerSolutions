@@ -12,6 +12,7 @@
       <w>isqrt</w>
       <w>jsqrt</w>
       <w>lenx</w>
+      <w>logn</w>
       <w>nseq</w>
       <w>palind</w>
       <w>printf</w>
@@ -24,6 +25,7 @@
       <w>shortten</w>
       <w>sseq</w>
       <w>sset</w>
+      <w>startc</w>
       <w>strangeloop</w>
       <w>trinary</w>
       <w>tuples</w>

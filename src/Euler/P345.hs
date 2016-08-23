@@ -36,8 +36,6 @@ tupleX xs n = [ (x,y) | let ts = tuple xs n, x <- ts, y <- ts]
 
 tuples xs = concatMap (tuple xs) [1..length xs]
 
-seek xss = initS
+seek xss = ms
     where len = toInteger . length $ xss
-          ps = [0..len-1]
-          set = S.fromList ps
-          initS = S.fromList [ ((S.fromList [x], S.fromList [y]), at xss x y) | x <- ps, y <- ps]
+          ms = map (tupleX [0..len-1]) [1..len]

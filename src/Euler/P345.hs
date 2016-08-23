@@ -36,6 +36,15 @@ tupleX xs n = [ (x,y) | let ts = tuple xs n, x <- ts, y <- ts]
 
 tuples xs = concatMap (tuple xs) [1..length xs]
 
-seek xss = ms
+--seek :: [[Integer]] -> M.Map ([Integer],[Integer]) Integer
+seek xss = go ms (M.fromList [(([],[]), 0)])
     where len = toInteger . length $ xss
-          ms = map (tupleX [0..len-1]) [1..len]
+          ms = concatMap (tupleX [0..len-1]) [1..len]
+          go [] d = d
+          go ((xs,ys):yss) d = go yss (M.insert (xs,ys) maxV d)
+            where maxV = maximum [v + v'| x <- xs , y <-ys
+                                        , let v   = at xss x y
+                                        , let xs' = delete x xs
+                                        , let ys' = delete y ys
+                                        , let v'  = d M.! (xs',ys')
+                                        ]

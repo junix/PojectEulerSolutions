@@ -1,9 +1,5 @@
 module Euler.P003 where
 
-primes = filterPrime [2..]
-  where filterPrime (p:xs) =
-          p : filterPrime [x | x <- xs, x `mod` p /= 0]
-
 maxFactor = go primes
     where go (x:xs) v
             | x > v     = v
@@ -12,7 +8,8 @@ maxFactor = go primes
             where (d,r) = v `quotRem` x
 
 primes = filterP [2..]
-  where filterP (x:xs) = x : (filterP . filter ((/=0) . (`rem` x))) xs
+  where  filterP (x:xs) = x : (filterP . filter (not.canDiv)) xs
+            where canDiv v = v `rem` x == 0
 
 factorise n = go n ps
   where r0 = truncate . sqrt . fromInteger $ n

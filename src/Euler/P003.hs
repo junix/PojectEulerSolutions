@@ -11,3 +11,17 @@ maxFactor = go primes
             | otherwise = go xs v
             where (d,r) = v `quotRem` x
 
+primes = filterP [2..]
+  where filterP (x:xs) = x : (filterP . filter ((/=0) . (`rem` x))) xs
+
+factorise n = go n ps
+  where r0 = truncate . sqrt . fromInteger $ n
+        ps = takeWhile (<=r0) primes
+        go 1 _ = []
+        go n [] = [n]
+        go n xs'@(x:xs)
+          | r == 0 = x : go q xs'
+          | otherwise = go n xs
+          where (q,r) = n `quotRem` x
+
+solve = maximum . factorise $ 600851475143

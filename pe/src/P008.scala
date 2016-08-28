@@ -4,6 +4,16 @@ import java.util.{List => JList}
 object P008 {
   type BigInts = List[BigInt]
 
+  implicit class SliceOps[T](seq: Seq[T]) {
+    def slicesBy(n: Int) = {
+      val xs = seq.toList.tails.take(n)
+      val is = Seq.fill[List[T]](seq.size)(Nil)
+      xs.foldRight(is) { (e: Seq[T], es: Seq[List[T]]) =>
+        e.zip(es).map { case (y, ys) => y :: ys }
+      }
+    }
+  }
+
   val ds =
     """
       |73167176531330624919225119674426574742355349194934
@@ -45,4 +55,8 @@ object P008 {
   }
 
   def solve = slices(13, ds).map(_.product).max
+
+  def solve2 = ds.slicesBy(13).map(_.product).max
 }
+
+

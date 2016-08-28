@@ -26,7 +26,11 @@ object P008 {
       |84580156166097919133875499200524063689912560717606
       |05886116467109405077541002256983155200055935729725
       |71636269561882670428252483600823257530420752963450
-    """.stripMargin.replace("\n", "").map(_ - '0').map(BigInt(_)).toList
+    """.stripMargin
+      .toList
+      .filter(_ != '\n')
+      .map(_ - '0')
+      .map(BigInt(_))
 
   def slices(n: Int, s: BigInts): List[Seq[BigInt]] = s.size match {
     case l if l < n => Nil

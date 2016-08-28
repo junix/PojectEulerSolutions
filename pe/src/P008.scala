@@ -2,6 +2,7 @@ import scala.BigInt
 import java.util.{List => JList}
 
 object P008 {
+  type BigInts = List[BigInt]
 
   val ds =
     """
@@ -25,12 +26,19 @@ object P008 {
       |84580156166097919133875499200524063689912560717606
       |05886116467109405077541002256983155200055935729725
       |71636269561882670428252483600823257530420752963450
-    """.stripMargin.replace("\n","").map {_-'0'}.map(BigInt(_)).toList
+    """.stripMargin.replace("\n", "").map(_ - '0').map(BigInt(_)).toList
 
-  def slices(n: Int, s :Seq[BigInt]) : List[Seq[BigInt]] = s.size match {
+  def slices(n: Int, s: BigInts): List[Seq[BigInt]] = s.size match {
     case l if l < n => Nil
     case _ => s.take(n) :: slices(n, s.tail)
   }
 
-  def solve = slices(13,ds).map(_.product).max
+  def slices2(n: Int, s: BigInts): BigInts = {
+    val xs = s.tails.take(n).toList
+    xs.tail.foldLeft(xs.head) { (as: BigInts, bs: BigInts) =>
+      as.zip(bs).map { case (a, b) => a * b }
+    }
+  }
+
+  def solve = slices(13, ds).map(_.product).max
 }
